@@ -21,6 +21,36 @@ type Query {
   getFollowing(userId: ID!, limit: Int!, nextToken: String!): ProfilesPage!
 }
 
+type Mutation {
+  editMyProfile(newProfile: ProfileInput!): MyProfile!
+  
+  tweet(text: String!): Tweet!
+
+  like(tweetId: ID!): Boolean!
+
+  unlike(tweetId: ID!): Boolean!
+
+  retweet(tweetId: ID!): Boolean!
+
+  unretweet(tweetId: ID!): Boolean!
+
+  reply(tweetId: ID!, text: String!): Reply!
+
+  follow(userId: ID!): Boolean!
+
+  unfollow(userId: ID!): Boolean!
+}
+
+input ProfileInput {
+  name: String!
+  imageUrl: AWSURL
+  backgroundImageUrl: AWSURL
+  bio: String
+  location: String
+  website: AWSURL
+  birthdate: AWSDate
+}
+
 interface IProfile {
   id: ID!
   name: String!
