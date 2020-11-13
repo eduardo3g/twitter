@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/eduardo3g/twitter/issues"
   },
-  "homepage": "https://github.com/eduardo3g/twitter#readme"
+  "homepage": "https://github.com/eduardo3g/twitter#readme",
+  "devDependencies": {
+    "serverless": "^2.4.0"
+  }
 }
