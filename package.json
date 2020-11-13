@@ -1,0 +1,21 @@
+{
+  "name": "twitter",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Social network developed with some Serverless stuff ☁️",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardo3g/twitter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardo3g/twitter/issues"
+  },
+  "homepage": "https://github.com/eduardo3g/twitter#readme"
+}
