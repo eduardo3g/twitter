@@ -12,12 +12,14 @@ const we_invoke_confirmUserSignUp = async (username, name, email) => {
     'userName': username,
     'triggerSource': 'PostConfirmation_ConfirmSignUp',
     'request': {
-      'sub': username,
-      'cognito:email_alias': email,
-      'cognito:user_status': 'CONFIRMED',
-      'email_verified': 'false',
-      'name': name,
-      'email': email,
+      'userAttributes': {
+        'sub': username,
+        'cognito:email_alias': email,
+        'cognito:user_status': 'CONFIRMED',
+        'email_verified': 'false',
+        'name': name,
+        'email': email,
+      },
     },
     'response': {},
   };

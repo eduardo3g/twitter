@@ -4,14 +4,14 @@ const then = require('../../steps/then');
 const chance = require('chance').Chance();
 
 describe('When confirmUserSignUp runs', () => {
-  it('The user profile shuold be saved in DynamoDB', async () => {
+  it('The user profile should be saved in DynamoDB', async () => {
     const { name, email } = given.a_random_user();
 
     const username = chance.guid();
 
-    await when.we_invoke_confirmUserSignup(username, name, email);
+    await when.we_invoke_confirmUserSignUp(username, name, email);
 
-    const ddbUser = await TouchEvent.user_exists_in_UsersTable(username);
+    const ddbUser = await then.user_exists_in_UsersTable(username);
 
     expect(ddbUser).toMatchObject({
       id: username,
