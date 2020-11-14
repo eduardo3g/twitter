@@ -5,7 +5,9 @@
   "description": "Social network developed with some Serverless stuff ☁️",
   "main": "index.js",
   "scripts": {
-    "sls": "sls"
+    "sls": "sls",
+    "exportEnv": "sls export-env",
+    "integration-test": "jest --verbose ./__tests__/test_cases/integration"
   },
   "repository": {
     "type": "git",
