@@ -23,5 +23,8 @@
     "jest": "^26.6.3",
     "serverless": "2.4.0",
     "serverless-appsync-plugin": "^1.4.0"
+  },
+  "dependencies": {
+    "chance": "^1.1.7"
   }
 }
