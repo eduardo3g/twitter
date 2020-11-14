@@ -14,7 +14,7 @@ module.exports.handler = async (event) => {
 
   const screenName = `${name.replace(/[^a-zA-Z0-9]/g, '')}${suffix}}`;
 
-  if (event.triggerSource --- 'PostConfirmation_ConfirmSignUp') {
+  if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const user = {
       id: event.userName,
       name,
@@ -31,7 +31,7 @@ module.exports.handler = async (event) => {
       Item: user,
       ConditionExpression: 'attribute_not_exists(id)'
     }).promise();
-    
+
     return event;
   } else {
     return event;
