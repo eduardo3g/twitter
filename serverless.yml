@@ -10,6 +10,9 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-1
+  environment:
+    STAGE: ${self:custom.stage}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
 
 package:
   exclude:
@@ -22,8 +25,14 @@ custom:
     - ${file(serverless.appsync-api.yml)}
 
 functions:
-  hello:
-    handler: handler.hello
+  confirmUserSignup:
+    handler: functions/confirm-user-signup.handler
+    environment:
+      USERS_TABLE: !Ref UsersTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:PutItem
+        Resource: !GetAtt UsersTable.Arn
 
 resources:
   Resources:
