@@ -20,6 +20,7 @@ package:
     - package.json
 
 custom:
+  region: ${opt:region, self:provider.region}
   stage: ${opt:stage, self:provider.stage}
   appSync:
     - ${file(serverless.appsync-api.yml)}
@@ -92,6 +93,8 @@ resources:
           - ALLOW_REFRESH_TOKEN_AUTH
         PreventUserExistenceErrors: ENABLED
   Outputs:
+    AwsRegion:
+        Value: ${self:custom.region}
     CognitoUserPoolId:
       Value: !Ref CognitoUserPool
 
