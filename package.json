@@ -8,7 +8,8 @@
     "sls": "sls",
     "exportEnv": "sls export-env",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration",
-    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e"
+    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e",
+    "create-cognito-user": "aws cognito-idp --region eu-west-1 sign-up --client-id 36fscdpd5co4sqijf2jdiumi1f --username test@twitterappsync.com --password 12345678 --user-attributes Name=name,Value=Eduardo"
   },
   "repository": {
     "type": "git",
