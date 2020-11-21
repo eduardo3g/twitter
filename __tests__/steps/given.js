@@ -65,7 +65,7 @@ const an_authenticated_user = async (user) => {
       USERNAME: username,
       PASSWORD: password,
     },
-  });
+  }).promise();
 
   console.log(`[${email}] - signed in`);
 
