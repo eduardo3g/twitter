@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "exportEnv": "sls export-env",
+    "exportEnv": "sls export-env && sls manifest",
     "test": "jest --verbose ./__tests__/test_cases/unit",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration",
     "e2e-test": "jest --verbose ./__tests__/test_cases/e2e",
