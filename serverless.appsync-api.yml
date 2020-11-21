@@ -12,6 +12,9 @@ mappingTemplates:
     dataSource: usersTable
     # request: Query.getMyProfile.request.vtl (DEFAULT)
     # response: Query.getMyProfile.response.vtl (DEFAULT)
+  - type: Mutation
+    field: editMyProfile
+    dataSource: usersTable
 
 dataSources:
   - type: NONE
