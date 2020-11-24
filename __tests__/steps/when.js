@@ -73,7 +73,7 @@ const we_invoke_an_appsync_template = (templatePath, context) => {
 };
 
 const a_user_calls_getMyProfile = async (user) => {
-  const getMyProfile = `query MyQuery {
+  const getMyProfile = `query getMyProfile {
     getMyProfile {
       website
       tweetsCount
@@ -101,9 +101,42 @@ const a_user_calls_getMyProfile = async (user) => {
   return profile;
 };
 
+const a_user_calls_editMyProfile = async (user, input) => {
+  const editMyProfile = `mutation editMyProfile($input: ProfileInput!) {
+    editMyProfile(newProfile: $input) {
+      website
+      tweetsCount
+      screenName
+      name
+      location
+      likesCount
+      imageUrl
+      id
+      followingCount
+      followersCount
+      createdAt
+      birthdate
+      bio
+      backgroundImageUrl
+    }
+  }`;
+
+  const variables = {
+    input,
+  };
+
+  const data = await GraphQL(process.env.API_URL, editMyProfile, variables, user.accessToken);
+  const profile = data.editMyProfile;
+
+  console.log(`${user.username} - edited profile`);
+
+  return profile;
+};
+
 module.exports = {
   we_invoke_confirmUserSignUp,
   a_users_signsup,
   we_invoke_an_appsync_template,
   a_user_calls_getMyProfile,
+  a_user_calls_editMyProfile,
 };

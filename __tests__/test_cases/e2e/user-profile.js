@@ -1,8 +1,9 @@
 const given = require('../../steps/given');
 const when = require('../../steps/when');
+const chance = require('chance').Chance();
 
 describe('Given an authenticated user', () => {
-  let user;
+  let user, profile;
 
   beforeAll(async () => {
     user = await given.an_authenticated_user();
@@ -30,5 +31,19 @@ describe('Given an authenticated user', () => {
     const [firstName, lastName] = profile.name.split(' ');
     expect(profile.screenName).toContain(firstName);
     expect(profile.screenName).toContain(lastName);
+  });
+
+  it('The user edit his profile with editMyProfile', async () => {
+    const newName = chance.first();
+    const input = {
+      name: newName,
+    };
+
+    const newProfile = await when.a_user_calls_editMyProfile(user, input);
+
+    expect(newProfile).toMatchObject({
+      ...profile,
+      name: newName
+    });
   });
 });
