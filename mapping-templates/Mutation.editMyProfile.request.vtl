@@ -17,10 +17,10 @@
         ":bio" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.bio),
         ":location" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.location),
         ":website" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.website),
-        ":birthdate" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.birthdate),
+        ":birthdate" : $util.dynamodb.toDynamoDBJson($context.arguments.newProfile.birthdate)
     }
   },
   "condition" : {
-    "expression": "attribute_exists(id)"
+    "expression" : "attribute_exists(id)"
   }
 }
