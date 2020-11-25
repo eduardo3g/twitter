@@ -44,20 +44,4 @@ module.exports = async (url, query, variables = {}, auth) => {
 
     throw error;
   }
-
-  const response = await http({
-    method: 'post',
-    url,
-    headers,
-    data: {
-      query,
-      variables: JSON.stringify(variables),
-    },
-  });
-
-  const { data, errors } = response.data;
-
-  throwOnErrors({ query, variables, errors });
-
-  return data;
 };
