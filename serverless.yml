@@ -68,6 +68,32 @@ resources:
             Value: ${self:custom.stage}
           - Key: Name
             Value: users-table
+    TweetsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: creator
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: byCreator
+            KeySchema:
+              - AttributeName: creator
+                KeyType: HASH
+              - AttributeName: id #tweet Id
+                KeyType: RANGE # sort key       
+            Projection:
+              ProjectionType: ALL # get all properties from Tweet item, instead of just creater and id
+        Tags:
+          - Key: Environment
+            Value: ${self:custom.stage}
+          - Key: Name
+            Value: tweets-table                
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
