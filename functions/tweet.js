@@ -17,6 +17,7 @@ module.exports.handler = async (event) => {
     text,
     creator: username,
     createdAt: timestamp,
+    replies: 0,
     likes: 0,
     retweets: 0,
   };
