@@ -40,7 +40,7 @@ module.exports = async (url, query, variables = {}, auth) => {
     return data;
   } catch (error) {
     const errors = _.get(error, 'response.data.errors');
-    throwOnErrors({ quero, variables, errors });
+    throwOnErrors({ query, variables, errors });
 
     throw error;
   }
