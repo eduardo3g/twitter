@@ -1,4 +1,3 @@
-require('dotenv').config();
 const S3 = require('aws-sdk/clients/s3');
 const s3 = new S3({ useAccelerateEndpoint: true });
 const ulid = require('ulid');
