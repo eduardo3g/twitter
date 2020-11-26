@@ -38,5 +38,17 @@ describe('Given an authentication user', () => {
       expect(tweets.length).toEqual(1);
       expect(tweets[0]).toMatchObject(tweet);
     });
+
+    it('He cannot request more than 25 tweets in a page', async () => {
+      await expect(when.a_user_calls_getTweets(
+        user,
+        user.username,
+        26
+      ))
+        .rejects
+        .toMatchObject({
+          message: expect.stringContaining('max limit is 25'),
+        });
+    });
   });
 });
