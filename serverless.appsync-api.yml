@@ -29,6 +29,11 @@ mappingTemplates:
     field: getTweets
     dataSource: tweetsTable
 
+  # NESTED FIELDS
+  - type: Tweet
+    field: profile
+    dataSource: usersTable
+
 dataSources:
   - type: NONE
     name: none
