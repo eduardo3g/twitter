@@ -100,7 +100,7 @@ const we_invoke_an_appsync_template = (templatePath, context) => {
   const template = fs.readFileSync(templatePath, { encoding: 'utf-8' });
   const ast = velocityTemplate.parse(template);
   const compiler = new velocityTemplate.Compile(ast, {
-    valueMapper: velocityMapper,
+    valueMapper: velocityMapper.map,
     escape: false,
   });
 
