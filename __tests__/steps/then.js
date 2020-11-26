@@ -18,6 +18,53 @@ const user_exists_in_UsersTable = async (id) => {
   return response.Item;
 };
 
+const tweetsCount_is_updated_in_UsersTable = async (id, newCount) => {
+  const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+  const response = await DynamoDB.get({
+    TableName: process.env.USERS_TABLE,
+    Key: {
+      id,
+    },
+  }).promise();
+
+  expect(response.Item).toBeTruthy();
+  expect(response.Item.tweetsCount).toEqual(newCount);
+
+  return response.Item;
+};
+
+const tweet_exists_in_TweetsTable = async (id) => {
+  const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+  const response = await DynamoDB.get({
+    TableName: process.env.TWEETS_TABLE,
+    Key: {
+      id,
+    },
+  }).promise();
+
+  expect(response.Item).toBeTruthy();
+
+  return response.Item;
+};
+
+const tweet_exists_in_TimelinesTable = async (userId, tweetId) => {
+  const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+  const response = await DynamoDB.get({
+    TableName: process.env.TIMELINES_TABLE,
+    Key: {
+      userId,
+      tweetId,
+    },
+  }).promise();
+
+  expect(response.Item).toBeTruthy();
+
+  return response.Item;
+};
+
 const user_can_upolad_image_to_url = async (url, filePath, contentType) => {
   const data = fs.readFileSync(filePath);
 
@@ -45,4 +92,7 @@ module.exports = {
   user_exists_in_UsersTable,
   user_can_upolad_image_to_url,
   user_can_download_image_from,
+  tweet_exists_in_TweetsTable,
+  tweet_exists_in_TimelinesTable,
+  tweetsCount_is_updated_in_UsersTable,
 };
