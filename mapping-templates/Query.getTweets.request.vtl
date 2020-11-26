@@ -1,4 +1,4 @@
-#set ($isValidLimit = $context.arguments.limit > 25)
+#set ($isValidLimit = $context.arguments.limit <= 25)
 $util.validate($isValidLimit, "max limit is 25")
 
 {
