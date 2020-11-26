@@ -50,6 +50,23 @@ const we_invoke_getImageUploadUrl = async (username, extension, contentType) => 
   return await handler(event, context);
 };
 
+const we_invoke_tweet = async (username, text) => {
+  const handler = require('../../functions/tweet').handler;
+
+  const context = {};
+
+  const event = {
+    identity: {
+      username
+    },
+    arguments: {
+      text,
+    },
+  };
+
+  return await handler(event, context);
+};
+
 const a_users_signsup = async (password, name, email) => {
   const cognito = new AWS.CognitoIdentityServiceProvider();
 
@@ -172,6 +189,7 @@ const a_user_calls_getImageUploadUrl = async (user, extension, contentType) => {
 module.exports = {
   we_invoke_confirmUserSignUp,
   we_invoke_getImageUploadUrl,
+  we_invoke_tweet,
   a_users_signsup,
   we_invoke_an_appsync_template,
   a_user_calls_getMyProfile,
