@@ -1,5 +1,5 @@
 #if ($context.arguments.limit > 25)
-  $util.error('max limit is 25')
+  $util.error("max limit is 25")
 #end
 
 {
@@ -10,7 +10,7 @@
     "expressionValues" : {
       ":userId" : $util.dynamodb.toDynamoDBJson($context.arguments.userId)
     }
-  }.
+  },
   "index" : "byCreator",
   "nextToken" : $util.toJson($context.arguments.nextToken),
   "limit" : $util.toJson($context.arguments.limit),
