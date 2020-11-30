@@ -136,7 +136,7 @@ resources:
           - AttributeName: userId
             KeyType: HASH
           - AttributeName: tweetId
-            KeyType: HASH
+            KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
