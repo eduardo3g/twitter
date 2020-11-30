@@ -31,7 +31,7 @@ describe('Tweet.profile.request template', () => {
     });
   });
 
-  it("Should shor-cirtuic if selectionSetList has only 'id'", () => {
+  it("Should short-cirtuic if selectionSetList has only 'id'", () => {
     const templatePath = path.resolve(
       __dirname,
       '../../../mapping-templates/Tweet.profile.request.vtl'
