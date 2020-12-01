@@ -23,7 +23,8 @@ describe('Given an authentication user', () => {
         text,
         replies: 0, 
         likes: 0, 
-        retweets: 0, 
+        retweets: 0,
+        liked: false,
       });
     });
 
