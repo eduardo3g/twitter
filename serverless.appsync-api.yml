@@ -37,6 +37,9 @@ mappingTemplates:
   - type: Mutation
     field: unlike
     dataSource: unlikeMutation
+  - type: Query
+    field: getLikes
+    dataSource: likesTable
 
   # NESTED FIELDS
   - type: Tweet
@@ -45,7 +48,7 @@ mappingTemplates:
   - type: Tweet
     field: liked
     dataSource: likesTable
-  - type: TimelinePage
+  - type: UnhydratedTweetsPage
     field: tweets
     dataSource: tweetsTable
 
