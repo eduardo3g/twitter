@@ -197,8 +197,6 @@ const a_user_calls_getMyProfile = async (user) => {
 
   const profile = data.getMyProfile;
 
-  console.log(`${user.username} - fetched profile`);
-
   return profile;
 };
 
@@ -216,8 +214,6 @@ const a_user_calls_editMyProfile = async (user, input) => {
   const data = await GraphQL(process.env.API_URL, editMyProfile, variables, user.accessToken);
   const profile = data.editMyProfile;
 
-  console.log(`${user.username} - edited profile`);
-
   return profile;
 };
 
@@ -233,8 +229,6 @@ const a_user_calls_getImageUploadUrl = async (user, extension, contentType) => {
 
   const data = await GraphQL(process.env.API_URL, editMyProfile, variables, user.accessToken);
   const url = data.getImageUploadUrl;
-
-  console.log(`${user.username} - got image upload url`);
 
   return url;
 };
@@ -262,8 +256,6 @@ const a_user_calls_tweet = async (user, text) => {
   const data = await GraphQL(process.env.API_URL, tweet, variables, user.accessToken);
   const newTeet = data.tweet;
 
-  console.log(`${user.username} - posted a new tweet`);
-
   return newTeet;
 };
 
@@ -286,8 +278,6 @@ const a_user_calls_getTweets = async (user, userId, limit, nextToken) => {
   const data = await GraphQL(process.env.API_URL, getTweets, variables, user.accessToken);
   const tweets = data.getTweets;
 
-  console.log(`${user.username} - tweets list`);
-
   return tweets;
 };
 
@@ -309,8 +299,6 @@ const a_user_calls_getMyTimeline = async (user, limit, nextToken) => {
   const data = await GraphQL(process.env.API_URL, getMyTimeline, variables, user.accessToken);
   const result = data.getMyTimeline;
 
-  console.log(`${user.username} - fetched timeline`);
-
   return result;
 };
 
@@ -326,8 +314,6 @@ const a_user_calls_like = async (user, tweetId) => {
   const data = await GraphQL(process.env.API_URL, like, variables, user.accessToken);
   const result = data.like;
 
-  console.log(`${user.username} - liked tweet [${tweetId}]`);
-
   return result;
 };
 
@@ -342,8 +328,6 @@ const a_user_calls_unlike = async (user, tweetId) => {
 
   const data = await GraphQL(process.env.API_URL, like, variables, user.accessToken);
   const result = data.like;
-
-  console.log(`${user.username} - unliked tweet [${tweetId}]`);
 
   return result;
 };

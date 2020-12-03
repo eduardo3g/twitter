@@ -76,14 +76,10 @@ const user_can_upolad_image_to_url = async (url, filePath, contentType) => {
     },
     data,
   });
-
-  console.log('uploaded image to', url);
 };
 
 const user_can_download_image_from = async (url) => {
   const response = await http(url);
-
-  console.log('downloaded image from', url);
 
   return response.data;
 };

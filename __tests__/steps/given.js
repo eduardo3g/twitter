@@ -70,8 +70,6 @@ const an_authenticated_user = async () => {
     },
   }).promise();
 
-  console.log(`[${email}] - signed in`);
-
   return {
     username,
     name,
