@@ -104,6 +104,26 @@ describe('Given an authentication user', () => {
           });
       });
 
+      it('Should see this tweet when he calls getLikes', async () => {
+        const { tweets, nextToken } = await when.a_user_calls_getLikes(
+          user,
+          user.username,
+          25
+        );
+
+        expect(nextToken).toBeNull();
+        expect(tweets).toHaveLength(1);
+        expect(tweets[0]).toMatchObject({
+          ...tweet,
+          liked: true,
+          likes: 1,
+          profile: {
+            ...tweet.profile,
+            likesCount: 1,
+          }
+        });
+      });
+
       describe('When he unlikes the tweet', () => {
         beforeAll(async () => {
           await when.a_user_calls_unlike(user, tweet.id);
@@ -123,6 +143,17 @@ describe('Given an authentication user', () => {
             .toMatchObject({
               message: expect.stringContaining('DynamoDB transaction error'),
             });
+        });
+
+        it('Should not see this tweet when he calls getLikes anymore', async () => {
+          const { tweets, nextToken } = await when.a_user_calls_getLikes(
+            user,
+            user.username,
+            25
+          );
+  
+          expect(nextToken).toBeNull();
+          expect(tweets).toHaveLength(0);
         });
       });
     });
