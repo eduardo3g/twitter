@@ -40,6 +40,11 @@ mappingTemplates:
   - type: Query
     field: getLikes
     dataSource: likesTable
+  - type: Mutation
+    field: retweet
+    dataSource: retweetFunction
+    request: false
+    response: false
 
   # NESTED FIELDS
   - type: Tweet
@@ -113,6 +118,10 @@ dataSources:
     name: tweetFunction
     config:
         functionName: tweet
+  - type: AWS_LAMBDA
+    name: retweetFunction
+    config:
+        functionName: retweet
       
 substitutions:
     TweetsTable: !Ref TweetsTable
