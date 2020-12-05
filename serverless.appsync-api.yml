@@ -54,6 +54,11 @@ mappingTemplates:
   - type: MyProfile
     field: tweets
     dataSource: tweetsTable
+  - type: OtherProfile
+    field: tweets
+    dataSource: tweetsTable
+    request: MyProfile.tweets.request.vtl
+    response: MyProfile.tweets.response.vtl
 
 dataSources:
   - type: NONE
