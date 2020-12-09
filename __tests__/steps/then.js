@@ -1,4 +1,5 @@
 require('dotenv').config();
+const _ = require('lodash');
 const AWS = require('aws-sdk');
 const http = require('axios');
 const fs = require('fs');
@@ -49,6 +50,27 @@ const tweet_exists_in_TweetsTable = async (id) => {
   return response.Item;
 };
 
+const retweet_exists_in_TweetsTable = async (userId, tweetId) => {
+  const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+  const response = await DynamoDB.query({
+    TableName: process.env.TWEETS_TABLE,
+    IndexName: 'retweetsByCreator',
+    KeyConditionExpression: 'creator = :creator AND retweetOf = :tweetId',
+    ExpressionAttributeValues: {
+      ':creator': userId,
+      ':tweetId': tweetId,
+    },
+    Limit: 1,
+  }).promise();
+
+  const retweet = _.get(response, 'Items.0');
+
+  expect(retweet).toBeTruthy();
+
+  return retweet;
+};
+
 const tweet_exists_in_TimelinesTable = async (userId, tweetId) => {
   const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
@@ -90,5 +112,6 @@ module.exports = {
   user_can_download_image_from,
   tweet_exists_in_TweetsTable,
   tweet_exists_in_TimelinesTable,
+  retweet_exists_in_TweetsTable,
   tweetsCount_is_updated_in_UsersTable,
 };
