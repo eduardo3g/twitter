@@ -116,6 +116,8 @@ resources:
             AttributeType: S
           - AttributeName: creator
             AttributeType: S
+          - AttributeName: retweetOf
+            AttributeType: S            
         GlobalSecondaryIndexes:
           - IndexName: byCreator
             KeySchema:
@@ -125,6 +127,14 @@ resources:
                 KeyType: RANGE # sort key       
             Projection:
               ProjectionType: ALL # get all properties from Tweet item, instead of just creater and id
+          - IndexName: retweetsByCreator
+            KeySchema:
+              - AttributeName: creator
+                KeyType: HASH
+              - AttributeName: retweetOf
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
         Tags:
           - Key: Environment
             Value: ${self:custom.stage}
