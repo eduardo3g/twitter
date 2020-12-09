@@ -74,22 +74,17 @@ const retweet_exists_in_TweetsTable = async (userId, tweetId) => {
 const retweet_exists_in_RetweetsTable = async (userId, tweetId) => {
   const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
-  const response = await DynamoDB.query({
-    TableName: process.env.TWEETS_TABLE,
-    IndexName: 'retweetsByCreator',
-    KeyConditionExpression: 'creator = :creator AND retweetOf = :tweetId',
-    ExpressionAttributeValues: {
-      ':creator': userId,
-      ':tweetId': tweetId,
+  const response = await DynamoDB.get({
+    TableName: process.env.RETWEETS_TABLE,
+    Key: {
+      userId,
+      tweetId,
     },
-    Limit: 1,
   }).promise();
 
-  const retweet = _.get(response, 'Items.0');
+  expect(response.Item).toBeTruthy();
 
-  expect(retweet).toBeTruthy();
-
-  return retweet;
+  return response.Item;
 };
 
 const tweet_exists_in_TimelinesTable = async (userId, tweetId) => {
