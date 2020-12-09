@@ -103,6 +103,22 @@ const tweet_exists_in_TimelinesTable = async (userId, tweetId) => {
   return response.Item;
 };
 
+const there_are_N_tweets_in_TimelinesTable = async (userId, n) => {
+  const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+  const response = await DynamoDB.query({
+    TableName: process.env.TIMELINES_TABLE,
+    KeyConditionExpression: 'userId = :userId',
+    ExpressionAttributeValues: {
+      ':userId': userId,
+    }
+  }).promise();
+
+  expect(response.Items).toHaveLength(n);
+
+  return response.Items;
+};
+
 const user_can_upolad_image_to_url = async (url, filePath, contentType) => {
   const data = fs.readFileSync(filePath);
 
@@ -130,5 +146,6 @@ module.exports = {
   tweet_exists_in_TimelinesTable,
   retweet_exists_in_TweetsTable,
   retweet_exists_in_RetweetsTable,
+  there_are_N_tweets_in_TimelinesTable,
   tweetsCount_is_updated_in_UsersTable,
 };
