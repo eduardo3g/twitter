@@ -66,7 +66,23 @@ fragment tweetFields on Tweet {
   replies
   likes
   retweets
+  retweeted
   liked
+}
+`;
+
+const retweetFragment = `
+fragment retweetFields on Retweet {
+  id
+  profile {
+    ... iProfileFields
+  }
+  createdAt
+  retweetOf {
+    ... on Tweet {
+      ... tweetFields
+    }
+  }
 }
 `;
 
@@ -75,6 +91,10 @@ fragment iTweetFields on ITweet {
   ... on Tweet {
     ... tweetFields
   }
+
+  ... on Retweet {
+    ... retweetFields
+  }
 }
 `;
 
@@ -82,6 +102,7 @@ registerFragment('myProfileFields', myProfileFragment);
 registerFragment('otherProfileFields', otherProfileFragment);
 registerFragment('iProfileFields', iProfileFragment);
 registerFragment('tweetFields', tweetFragment);
+registerFragment('retweetFields', retweetFragment);
 registerFragment('iTweetFields', iTweetFragment);
 
 const we_invoke_confirmUserSignUp = async (username, name, email) => {
