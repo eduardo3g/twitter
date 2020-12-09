@@ -164,7 +164,7 @@ describe('Given an authentication user', () => {
       });
 
       it('Should see the retweet when he calls getTweets', async () => {
-        const { nextToken, tweets } = await when.a_user_calls_getTweets(
+        const { tweets } = await when.a_user_calls_getTweets(
           userA,
           userA.username,
           25
