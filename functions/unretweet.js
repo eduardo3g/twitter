@@ -26,12 +26,12 @@ module.exports.handler = async (event) => {
     throw new Error('Tweet was not found');
   }
 
-  const queryResponse = await DynamoDB.query({
+  const queryResponse = await DocumentClient.query({
     TableName: process.env.TWEETS_TABLE,
     IndexName: 'retweetsByCreator',
     KeyConditionExpression: 'creator = :creator AND retweetOf = :tweetId',
     ExpressionAttributeValues: {
-      ':creator': userId,
+      ':creator': username,
       ':tweetId': tweetId,
     },
     Limit: 1,
@@ -42,11 +42,7 @@ module.exports.handler = async (event) => {
   if (!retweet) {
     throw new Error('Retweet is not found');
   }
-
-  // Save a new tweet in the TWEETS_TABLE
-  // Save a new entry in the RETWEETS_TABLE
-  // Increment the retweets count of the original tweet by one
-  // Increment the tweets count of the user by one
+  
   const transactItems = [{
     Delete: {
       TableName: TWEETS_TABLE,
