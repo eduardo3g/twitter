@@ -88,7 +88,7 @@ functions:
           - !GetAtt TimelinesTable.Arn
           - !GetAtt RetweetsTable.Arn
   unretweet:
-    handler: functions/retweet.handler
+    handler: functions/unretweet.handler
     environment:
       USERS_TABLE: !Ref UsersTable
       TWEETS_TABLE: !Ref TweetsTable
