@@ -429,6 +429,21 @@ const a_user_calls_retweet = async (user, tweetId) => {
   return result;
 };
 
+const a_user_calls_unretweet = async (user, tweetId) => {
+  const unretweet = `mutation unretweet($tweetId: ID!) {
+    unretweet(tweetId: $tweetId)
+  }`;
+
+  const variables = {
+    tweetId,
+  };
+
+  const data = await GraphQL(process.env.API_URL, unretweet, variables, user.accessToken);
+  const result = data.unretweet;
+
+  return result;
+};
+
 module.exports = {
   we_invoke_confirmUserSignUp,
   we_invoke_getImageUploadUrl,
@@ -447,4 +462,5 @@ module.exports = {
   a_user_calls_unlike,
   a_user_calls_getLikes,
   a_user_calls_retweet,
+  a_user_calls_unretweet,
 };
