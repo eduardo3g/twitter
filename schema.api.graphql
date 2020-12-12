@@ -129,7 +129,7 @@ type Reply implements ITweet {
   id: ID!
   profile: IProfile!
   createdAt: AWSDateTime!
-  inReplyToTweet: ITweet!
+  inReplyToTweetId: ITweet!
   inReplyToUsers: [IProfile!]
   text: String!
   replies: Int!
