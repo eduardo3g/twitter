@@ -162,7 +162,9 @@ resources:
           - AttributeName: creator
             AttributeType: S
           - AttributeName: retweetOf
-            AttributeType: S            
+            AttributeType: S
+          - AttributeName: inReplyToTweetId
+            AttributeType: S    
         GlobalSecondaryIndexes:
           - IndexName: byCreator
             KeySchema:
@@ -180,6 +182,14 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
+          - IndexName: repliesForTweet
+            KeySchema:
+              - AttributeName: inReplyToTweetId
+                KeyType: HASH
+              - AttributeName: id
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL              
         Tags:
           - Key: Environment
             Value: ${self:custom.stage}
