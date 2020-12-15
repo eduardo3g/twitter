@@ -201,6 +201,24 @@ const we_invoke_unretweet = async (username, tweetId) => {
   return await handler(event, context);
 };
 
+const we_invoke_reply = async (username, tweetId, text) => {
+  const handler = require('../../functions/reply').handler;
+
+  const context = {};
+
+  const event = {
+    identity: {
+      username
+    },
+    arguments: {
+      tweetId,
+      text,
+    },
+  };
+
+  return await handler(event, context);
+};
+
 const a_users_signsup = async (password, name, email) => {
   const cognito = new AWS.CognitoIdentityServiceProvider();
 
@@ -450,6 +468,7 @@ module.exports = {
   we_invoke_tweet,
   we_invoke_retweet,
   we_invoke_unretweet,
+  we_invoke_reply,
   a_users_signsup,
   we_invoke_an_appsync_template,
   a_user_calls_getMyProfile,
