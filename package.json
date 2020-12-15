@@ -7,9 +7,9 @@
   "scripts": {
     "sls": "sls",
     "exportEnv": "sls export-env && sls manifest",
-    "test": "jest --verbose ./__tests__/test_cases/unit",
-    "integration-test": "jest --verbose ./__tests__/test_cases/integration",
-    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e",
+    "test": "jest --verbose ./__tests__/test_cases/unit --silent",
+    "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
+    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e --silent",
     "create-cognito-user": "aws cognito-idp --region eu-west-1 sign-up --client-id 36fscdpd5co4sqijf2jdiumi1f --username test@twitterappsync.com --password 12345678 --user-attributes Name=name,Value=Eduardo"
   },
   "repository": {
