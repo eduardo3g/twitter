@@ -1,9 +1,8 @@
 const given = require('../../steps/given');
 const when = require('../../steps/when');
-const then = require('../../steps/then');
 const chance = require('chance').Chance();
 
-describe('Given an authentication user', () => {
+describe('Given an authenticated user', () => {
   let userA;
 
   beforeAll(async () => {
@@ -44,7 +43,7 @@ describe('Given an authentication user', () => {
       it('He will see the new tweet in the tweets array', () => {  
         expect(nextToken).toBeNull();
         expect(tweets.length).toEqual(1);
-        expect(tweets[0]).toMatchObject(tweet);
+        expect(tweets[0]).toEqual(tweet);
       });
   
       it('He cannot request more than 25 tweets in a page', async () => {
@@ -71,7 +70,7 @@ describe('Given an authentication user', () => {
       it('He will see the new tweet in the tweets array', () => {  
         expect(nextToken).toBeNull();
         expect(tweets.length).toEqual(1);
-        expect(tweets[0]).toMatchObject(tweet);
+        expect(tweets[0]).toEqual(tweet);
       });
   
       it('He cannot request more than 25 tweets in a page', async () => {
@@ -288,7 +287,7 @@ describe('Given an authentication user', () => {
 
         describe('When user A unretweets user B tweet', () => {
           beforeAll(async () => {
-            when.a_user_calls_unretweet(userA, anotherTweet.id);
+            await when.a_user_calls_unretweet(userA, anotherTweet.id);
           });
 
           it('User A should not see the retweet when he calls getTweets anymore', async () => {
