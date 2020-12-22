@@ -73,9 +73,19 @@ mappingTemplates:
   - type: Tweet
     field: liked
     dataSource: likesTable
+  - type: Reply
+    field: liked
+    dataSource: likesTable
+    request: Tweet.liked.request.vtl
+    response: Tweet.liked.response.vtl
   - type: Tweet
     field: retweeted
-    dataSource: retweetsTable    
+    dataSource: retweetsTable
+  - type: Reply
+    field: retweeted
+    dataSource: retweetsTable
+    request: Tweet.retweeted.request.vtl
+    response: Tweet.retweeted.response.vtl
   - type: Retweet
     field: retweetOf
     dataSource: tweetsTable
@@ -149,25 +159,25 @@ dataSources:
   - type: AWS_LAMBDA
     name: getImageUploadUrlFunction
     config:
-        functionName: getImageUploadUrl
+      functionName: getImageUploadUrl
   - type: AWS_LAMBDA
     name: tweetFunction
     config:
-        functionName: tweet
+      functionName: tweet
   - type: AWS_LAMBDA
     name: retweetFunction
     config:
-        functionName: retweet
+      functionName: retweet
   - type: AWS_LAMBDA
     name: unretweetFunction
     config:
-        functionName: unretweet
+      functionName: unretweet
   - type: AWS_LAMBDA
     name: replyFunction
     config:
-        functionName: reply
-      
+      functionName: reply
+
 substitutions:
-    TweetsTable: !Ref TweetsTable
-    LikesTable: !Ref LikesTable
-    UsersTable: !Ref UsersTable
+  TweetsTable: !Ref TweetsTable
+  LikesTable: !Ref LikesTable
+  UsersTable: !Ref UsersTable
