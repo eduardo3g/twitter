@@ -103,5 +103,5 @@ module.exports.handler = async (event) => {
     TransactItems: transactItems 
   }).promise();
 
-  return true;
+  return newRetweet;
 };
