@@ -25,7 +25,7 @@ module.exports.handler = async (event) => {
 
   const inReplyToUserIds = await getUserIdsToReplyTo(tweet);
 
-  const newRetweet = {
+  const newTweet = {
     __typename: TweetTypes.REPLY,
     id,
     creator: username,
@@ -38,14 +38,10 @@ module.exports.handler = async (event) => {
     retweets: 0,
   };
 
-  // Save a new reply in the TWEETS_TABLE
-  // Save a new entry in the RETWEETS_TABLE
-  // Increment the retweets count of the original tweet by one
-  // Increment the tweets count of the user by one
   const transactItems = [{
     Put: {
       TableName: TWEETS_TABLE,
-      Item: newRetweet,
+      Item: newTweet,
     },
   }, {
     Update: {
@@ -88,7 +84,7 @@ module.exports.handler = async (event) => {
     TransactItems: transactItems 
   }).promise();
 
-  return true;
+  return newTweet;
 };
 
 async function getUserIdsToReplyTo (tweet) {
