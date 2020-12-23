@@ -94,7 +94,7 @@ mappingTemplates:
     dataSource: tweetsTable
   - type: Reply
     field: inReplyToUsers
-    dataSource: usersTable    
+    dataSource: usersTable
   - type: UnhydratedTweetsPage
     field: tweets
     dataSource: tweetsTable
