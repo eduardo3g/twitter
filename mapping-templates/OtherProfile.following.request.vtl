@@ -5,6 +5,6 @@
   "operation" : "GetItem",
   "key" : {
     "userId" : $util.dynamodb.toDynamoDBJson($context.identity.username),
-    "sk" : $util.dynamodb.toDynamoDBJson($context.source.id)
+    "sk" : $util.dynamodb.toDynamoDBJson($sk)
   }
 }
