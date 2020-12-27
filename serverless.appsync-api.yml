@@ -13,6 +13,9 @@ mappingTemplates:
     # request: Query.getMyProfile.request.vtl (DEFAULT)
     # response: Query.getMyProfile.response.vtl (DEFAULT)
   - type: Query
+    field: getProfile
+    dataSource: usersTable
+  - type: Query
     field: getImageUploadUrl
     dataSource: getImageUploadUrlFunction
     request: false
