@@ -65,7 +65,7 @@ async function distribute(tweet, followers) {
   
   const chunks = _.chunk(timelineEntries, Constants.DynamoDB.MAX_BATCH_SIZE);
 
-  const promises = chunks.map(chunk => {
+  const promises = chunks.map(async chunk => {
     await DocumentClient.batchWrite({
       RequestItems: {
         [TIMELINES_TABLE]: chunk,
@@ -88,7 +88,7 @@ async function undistribute(tweet, followers) {
   
   const chunks = _.chunk(timelineEntries, Constants.DynamoDB.MAX_BATCH_SIZE);
 
-  const promises = chunks.map(chunk => {
+  const promises = chunks.map(async chunk => {
     await DocumentClient.batchWrite({
       RequestItems: {
         [TIMELINES_TABLE]: chunk,

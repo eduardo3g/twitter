@@ -133,7 +133,7 @@ functions:
           - !GetAtt TweetsTable.Arn
           - !GetAtt TimelinesTable.Arn
   distributeTweets:
-    handler: functions/distribute-tweet.handler
+    handler: functions/distribute-tweets.handler
     environment:
       RELATIONSHIPS_TABLE: !Ref RelationshipsTable
       TIMELINES_TABLE: !Ref TimelinesTable
