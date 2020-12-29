@@ -27,6 +27,22 @@ describe('Given user A follows user B', () => {
     it("Should add user B's tweet to user A's timeline", async () => {
       await then.tweet_exists_in_TimelinesTable(userA.username, tweetId);
     });
+
+    describe('When user B deletes the tweet', () => {
+      const tweetId = chance.guid();
+
+      beforeAll(async () => {
+        const event = require('../../data/delete-tweet.json');
+        const { OldImage } = event.Records[0].dynamodb;
+        OldImage.creator.S = userB.username;
+        OldImage.id.S = tweetId;
+        await when.we_invoke_distributeTweets(event);
+      });
+  
+      it("Should remove user B's tweet to user A's timeline", async () => {
+        await then.tweet_does_not_exist_in_TimelinesTable(userA.username, tweetId);
+      });
+    });
   });
 
 });
