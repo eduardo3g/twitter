@@ -150,7 +150,7 @@ functions:
         Resource: !GetAtt TimelinesTable.Arn
       - Effect: Allow
         Action: dynamodb:Query
-        Resource: !Sub "${RelationshipsTable.Arn/index/byOtherUser}"
+        Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
 resources:
   Resources:
     UsersTable:
