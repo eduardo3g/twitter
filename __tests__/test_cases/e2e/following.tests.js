@@ -1,7 +1,9 @@
 require('dotenv').config();
+const chance = require('chance').Chance();
 const { before } = require('lodash');
 const given = require('../../steps/given');
 const when = require('../../steps/when');
+const retry = require('async-retry');
 
 describe('Given authenticated users, user A and B', () => {
   let userA, userB, userAsProfile, userBsProfile;
@@ -37,6 +39,28 @@ describe('Given authenticated users, user A and B', () => {
       expect(following).toBe(false);
       expect(followedBy).toBe(true);
     });
+
+    describe('User B sends a tweet', () => {
+      let tweet;
+      const text = chance.string({ length: 16 });
+
+      beforeAll(async () => {
+        tweet = await when.a_user_calls_tweet(userB, text);
+      });
+
+      it("Should appear in user A's timeline", async () => {
+        await retry(async () => {
+          const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
+
+          expect(tweets).toHaveLength(1);
+          expect(tweets[0].id).toEqual(tweet.id);
+        }, {
+          retries: 3,
+          maxTimeout: 1000,
+        });
+      });
+    });
+
   });
 
   describe('When user B follows user A back', () => {
@@ -62,6 +86,27 @@ describe('Given authenticated users, user A and B', () => {
 
       expect(following).toBe(true);
       expect(followedBy).toBe(true);
+    });
+
+    describe('User A sends a tweet', () => {
+      let tweet;
+      const text = chance.string({ length: 16 });
+
+      beforeAll(async () => {
+        tweet = await when.a_user_calls_tweet(userA, text);
+      });
+
+      it("Should appear in user B's timeline", async () => {
+        await retry(async () => {
+          const { tweets } = await when.a_user_calls_getMyTimeline(userB, 25);
+
+          expect(tweets).toHaveLength(2);
+          expect(tweets[0].id).toEqual(tweet.id);
+        }, {
+          retries: 3,
+          maxTimeout: 1000,
+        });
+      });
     });
   });
 
