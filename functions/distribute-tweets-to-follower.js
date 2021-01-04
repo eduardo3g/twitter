@@ -1,8 +1,7 @@
 const _ = require('lodash');
-const DynamoDB = require ('aws-sdk/clients/dynamodb');
+const DynamoDB = require('aws-sdk/clients/dynamodb');
 const DocumentClient = new DynamoDB.DocumentClient();
 const Constants = require('../lib/constants');
-const { a_user_calls_getTweets } = require('../__tests__/steps/when');
 
 const { TWEETS_TABLE, TIMELINES_TABLE, MAX_TWEETS } = process.env;
 const MaxTweets = parseInt(MAX_TWEETS);
@@ -12,19 +11,17 @@ module.exports.handler = async (event) => {
     if (record.eventName === 'INSERT') {
       const relationship = DynamoDB.Converter.unmarshall(record.dynamodb.NewImage);
 
-      const [relationshipType] = relationship.split('_');
+      const [relationshipType] = relationship.sk.split('_');
 
       if (relationshipType === 'FOLLOWS') {
         const tweets = await getTweets(relationship.otherUserId);
 
         await distribute(tweets, relationship.userId);
       }
-
-      await distribute(tweet, followers);
     } else if (record.eventName === 'REMOVE') {
       const relationship = DynamoDB.Converter.unmarshall(record.dynamodb.OldImage);
 
-      const [relationshipType] = relationship.split('_');
+      const [relationshipType] = relationship.sk.split('_');
 
       if (relationshipType === 'FOLLOWS') {
         const tweets = await getTimelineEntriesBy(
@@ -44,7 +41,7 @@ async function getTweets(userId) {
       TableName: TWEETS_TABLE,
       KeyConditionExpression: 'creator = :userId',
       ExpressionAttributeValues: {
-        ':userID': userId,
+        ':userId': userId,
       },
       IndexName: 'byCreator',
       ExclusiveStartKey: exclusiveStartKey
@@ -70,7 +67,7 @@ async function getTimelineEntriesBy(distributedFrom, userId) {
       TableName: TIMELINES_TABLE,
       KeyConditionExpression: 'userId = :userId AND distributedFrom = :distributedFrom',
       ExpressionAttributeValues: {
-        ':userID': userId,
+        ':userId': userId,
         ':distributedFrom': distributedFrom,
       },
       IndexName: 'byDistributedFrom',
