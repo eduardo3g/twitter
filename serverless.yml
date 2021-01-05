@@ -161,6 +161,8 @@ functions:
       - stream:
           type: dynamodb
           arn: !GetAtt RelationshipsTable.StreamArn
+    # Only required if the auto generated name exceeds 64 characters
+    iamRoleStatementsName: ${self:service}-${self:custom.stage}-distributeTweetsToFollower
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:Query
