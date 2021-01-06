@@ -132,4 +132,48 @@ describe('Given authenticated users, user A and B', () => {
     });
   });
 
+  describe('When user A unfollows user B', () => {
+    beforeAll(async () => {
+      await when.a_user_calls_unfollow(userA, userB.username);
+    });
+
+    it("User A should see the following as false when viewing user B's profile", async () => {
+      const { following, followedBy} = await when.a_user_calls_getProfile(
+        userA,
+        userBsProfile.screenName
+      );
+
+      expect(following).toBe(false);
+      expect(followedBy).toBe(true);
+    });
+
+    it("User B should see followedBy as true when viewing user A's profile", async () => {
+      const { following, followedBy} = await when.a_user_calls_getProfile(
+        userB,
+        userAsProfile.screenName
+      );
+
+      expect(following).toBe(true);
+      expect(followedBy).toBe(false);
+    });
+
+    it("Should remove user B's tweet to user A's timeline", async () => {
+      retry(async () => {
+        const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
+
+        expect(tweets).toHaveLength(1);
+        expect(tweets).toEqual([
+          expect.objectContaining({
+            profile: {
+              id: userA.username,
+            },
+          }),
+        ]);
+      }, {
+        retries: 3,
+        maxTimeout: 1000,
+      });
+    });
+  });
+
 });
