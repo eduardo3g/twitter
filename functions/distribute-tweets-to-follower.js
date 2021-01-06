@@ -71,7 +71,7 @@ async function getTimelineEntriesBy(distributedFrom, userId) {
         ':distributedFrom': distributedFrom,
       },
       IndexName: 'byDistributedFrom',
-      ExclusiveStartKey: exclusiveStartKey
+      ExclusiveStartKey: exclusiveStartKey,
     }).promise();
   
     const tweets = response.Items || [];
