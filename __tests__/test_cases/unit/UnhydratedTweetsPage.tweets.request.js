@@ -3,7 +3,7 @@ const when = require('../../steps/when');
 const chance = require('chance').Chance();
 const path = require('path');
 
-describe('TimelinePage.tweets.request template', () => {
+describe('UhydratedTweetsPage.tweets.request template', () => {
   it('Should return empty array if source.tweets is empty', () => {
     const templatePath = path.resolve(
       __dirname,
