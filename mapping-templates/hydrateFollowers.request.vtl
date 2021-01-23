@@ -6,10 +6,7 @@
 #foreach ($relationship in $context.prev.result.relationships)
   #set ($user = {})
   #set ($user.id = $relationship.userId)
-
-  # toMapValues -> convert to DynamoDB data-structure
-  # util.qr -> ignore the result from the 'add' operation
-  $uti.qr($users.add($util.dynamodb.toMapValues($user))) 
+  $util.qr($users.add($util.dynamodb.toMapValues($user))) 
 #end
 
 {
