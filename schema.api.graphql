@@ -16,9 +16,9 @@ type Query {
 
   getLikes(userId: ID!, limit: Int!, nextToken: String): UnhydratedTweetsPage!
 
-  getFollowers(userId: ID!, limit: Int!, nextToken: String!): ProfilesPage!
+  getFollowers(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
 
-  getFollowing(userId: ID!, limit: Int!, nextToken: String!): ProfilesPage!
+  getFollowing(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
 }
 
 type Mutation {
