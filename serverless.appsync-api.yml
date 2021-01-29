@@ -148,7 +148,7 @@ functionConfigurations:
     dataSource: usersTable
   - name: getFollowing
     dataSource: relationshipsTable
-  - name: hydrateFollowers
+  - name: hydrateFollowing
     dataSource: usersTable
 
 dataSources:
