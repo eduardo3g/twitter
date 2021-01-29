@@ -384,6 +384,28 @@ const a_users_calls_getFollowers = async (user, userId, limit, nextToken) => {
   return profile;
 };
 
+const a_users_calls_getFollowing = async (user, userId, limit, nextToken) => {
+  const getFollowing = `query getFollowing($userId: ID!, $limit: Int!, $nextToken: String) {
+    getFollowing(userId: $userId, limit: $limit, nextToken: $nextToken) {
+      profiles {
+        ... iProfileFields
+      }
+    }
+  }`;
+
+  const variables = {
+    userId,
+    limit,
+    nextToken,
+  }
+
+  const data = await GraphQL(process.env.API_URL, getFollowing, variables, user.accessToken);
+
+  const profile = data.getFollowing;
+
+  return profile;
+};
+
 const a_user_calls_editMyProfile = async (user, input) => {
   const editMyProfile = `mutation editMyProfile($input: ProfileInput!) {
     editMyProfile(newProfile: $input) {
@@ -643,4 +665,5 @@ module.exports = {
   a_user_calls_unfollow,
   a_user_calls_getProfile,
   a_users_calls_getFollowers,
+  a_users_calls_getFollowing,
 };

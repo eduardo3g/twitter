@@ -43,7 +43,7 @@ describe('Given authenticated users, user A and B', () => {
       expect(followedBy).toBe(true);
     });
 
-    it("Should see him self in the user B's list of followers", async () => {
+    it("Should see himself in the user B's list of followers", async () => {
       const { profiles } = await when.a_users_calls_getFollowers(userA, userB.username, 25);
 
       expect(profiles).toHaveLength(1);
@@ -52,6 +52,17 @@ describe('Given authenticated users, user A and B', () => {
       });
       expect(profiles[0]).not.toHaveProperty('following');
       expect(profiles[0]).not.toHaveProperty('followedBy');
+    });
+
+    it("Should see user B in his list of following", async () => {
+      const { profiles } = await when.a_users_calls_getFollowing(userA, userA.username, 25);
+
+      expect(profiles).toHaveLength(1);
+      expect(profiles[0]).toMatchObject({
+        id: userB.username,
+        following: true,
+        followedBy: false,
+      });
     });
 
     it('User B should see user A in his list of followers', async () => {
@@ -63,6 +74,11 @@ describe('Given authenticated users, user A and B', () => {
         following: false,
         followedBy: true,
       });
+    });
+
+    it("User B should not see user A in his list of following", async () => {
+      const { profiles } = await when.a_users_calls_getFollowing(userB, userB.username, 25);
+      expect(profiles).toHaveLength(0);
     });
 
     it("Should add user B's tweet to user A's timeline", async () => {
