@@ -51,6 +51,14 @@ mappingTemplates:
       - hydrateFollowers
     request: simplePipeline.request.vtl
     response: simplePipeline.response.vtl
+  - type: Query
+    field: getFollowing
+    kind: PIPELINE
+    functions:
+      - getFollowing
+      - hydrateFollowing
+    request: simplePipeline.request.vtl
+    response: simplePipeline.response.vtl
   - type: Mutation
     field: retweet
     dataSource: retweetFunction
@@ -135,6 +143,10 @@ mappingTemplates:
 
 functionConfigurations:
   - name: getFollowers
+    dataSource: relationshipsTable
+  - name: hydrateFollowers
+    dataSource: usersTable
+  - name: getFollowing
     dataSource: relationshipsTable
   - name: hydrateFollowers
     dataSource: usersTable
