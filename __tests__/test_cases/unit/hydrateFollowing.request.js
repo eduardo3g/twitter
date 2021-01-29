@@ -20,7 +20,9 @@ describe('hydrateFollowing.request template', () => {
     const context = given.an_appsync_context({ username }, {}, {}, {}, {}, prev);
     const result = when.we_invoke_an_appsync_template(templatePath, context)
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({
+      profiles: [],
+    });
   });
 
   it('Should convert relationships to BatchGetItem keys', () => {
