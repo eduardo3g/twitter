@@ -7,6 +7,7 @@
   "scripts": {
     "sls": "sls",
     "exportEnv": "sls export-env && sls manifest",
+    "exportEnvStaging": "sls export-env -s staging && sls manifest -s staging",
     "test": "jest --verbose ./__tests__/test_cases/unit --silent",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
     "e2e-test": "jest --verbose ./__tests__/test_cases/e2e --silent",
