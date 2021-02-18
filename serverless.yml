@@ -185,8 +185,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS:AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS:AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
   syncTweetsToAlgolia:
     handler: functions/sync-tweets-to-algolia.handler
     events:
@@ -197,8 +197,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS:AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS:AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
 resources:
   Resources:
     UsersTable:
