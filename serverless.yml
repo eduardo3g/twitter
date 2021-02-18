@@ -219,7 +219,9 @@ resources:
               - AttributeName: screenName
                 KeyType: HASH
             Projection:
-              ProjectionType: ALL  
+              ProjectionType: ALL
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         Tags:
           - Key: Environment
             Value: ${self:custom.stage}
