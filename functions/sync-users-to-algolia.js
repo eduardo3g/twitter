@@ -1,3 +1,4 @@
+const DynamoDB = require('aws-sdk/clients/dynamodb');
 const { initUsersIndex } = require('../lib/algolia');
 
 const { STAGE, ALGOLIA_APP_ID, ALGOLIA_WRITE_KEY } = process.env;

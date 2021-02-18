@@ -1,3 +1,4 @@
+const DynamoDB = require('aws-sdk/clients/dynamodb');
 const { initTweetsIndex } = require('../lib/algolia');
 const { TweetTypes } = require('../lib/constants');
 
