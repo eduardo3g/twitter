@@ -107,7 +107,7 @@ function genNextToken(searchParams) {
 
   const payload = Object.assign({}, searchParams, { random: chance.string({ length: 16 }) });
 
-  const token = JSON.string(payload);
+  const token = JSON.stringify(payload);
 
   return Buffer.from(token).toString('base64');
 }
