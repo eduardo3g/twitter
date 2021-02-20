@@ -58,7 +58,34 @@ async function searchPeople(context, userId, query, limit, nextToken) {
   return {
     results: hits,
     nextToken: genNextToken(nextSearchParams),
+  };
+}
+
+async function searchLatest(context, query, limit, nextToken) {
+  const index = await initTweetsIndex(
+    context.ALGOLIA_APP_ID,
+    context.ALGOLIA_WRITE_KEY,
+    STAGE
+  );
+
+  const searchParams = parseNextToken(nextToken) || {
+    hitsPerPage: limit,
+    page: 0,
+  };
+
+  const { hits, page, nbPages } = await index.search(query, searchParams);
+
+  let nextSearchParams;
+  if (page + 1 >= nbPages) {
+    nextSearchParams = null;
+  } else {
+    nextSearchParams = Object.assign({}, searchParams, { page: page + 1 });
   }
+
+  return {
+    results: hits,
+    nextToken: genNextToken(nextSearchParams),
+  };
 }
 
 function parseNextToken(nextToken) {
