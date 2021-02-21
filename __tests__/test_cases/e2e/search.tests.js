@@ -1,7 +1,8 @@
+const chance = require('chance').Chance();
 const retry = require('async-retry');
 const given = require('../../steps/given');
 const when = require('../../steps/when');
-const { SearchModes } = require('../../../lib/constants');
+const { SearchModes, TweetTypes } = require('../../../lib/constants');
 
 describe('Given an authenticated user', () => {
   let userA, userAsProfile;
@@ -55,4 +56,64 @@ describe('Given an authenticated user', () => {
       maxTimeout: 1000,
     });
   }, 10000);
+
+  describe('When the user sends a tweet', () => {
+    let tweet;
+    const text = chance.string({ length: 16 });
+    beforeAll(async () => {
+      tweet = await when.a_user_calls_tweet(userA, text);
+    });
+
+    it('Should find his tweet when he searches for the text', async () => {
+      await retry(async () => {
+        const { results, nextToken } = await when.a_users_calls_search(
+          userA,
+          SearchModes.LATEST,
+          text,
+          10
+        );
+  
+        expect(nextToken).toBeNull();
+        expect(results).toHaveLength(1);
+        expect(results[0]).toMatchObject({
+          __typename: TweetTypes.TWEET,
+          id: tweet.id,
+          text,
+        });
+      }, {
+        retries: 5,
+        maxTimeout: 1000,
+      });
+    }, 10000);
+
+    describe('When the user replies to the tweet', () => {
+      let reply;
+      const replyText = chance.string({ length: 16 });
+      beforeAll(async () => {
+        reply = await when.a_user_calls_reply(userA, tweet.id, replyText);
+      });
+      
+      it('Should find his reply when he searches for the reply text', async () => {
+        await retry(async () => {
+          const { results, nextToken } = await when.a_users_calls_search(
+            userA,
+            SearchModes.LATEST,
+            replyText,
+            10
+          );
+    
+          expect(nextToken).toBeNull();
+          expect(results).toHaveLength(1);
+          expect(results[0]).toMatchObject({
+            __typename: TweetTypes.REPLY,
+            id: reply.id,
+            text: replyText,
+          });
+        }, {
+          retries: 5,
+          maxTimeout: 1000,
+        });
+      }, 10000);
+    });
+  });
 });
