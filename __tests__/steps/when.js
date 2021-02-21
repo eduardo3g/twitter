@@ -638,6 +638,40 @@ const a_user_calls_unfollow = async (user, userId) => {
   return result;
 };
 
+const a_users_calls_search = async (user, mode, query, limit, nextToken) => {
+  const search = `query search($query: String!, $limit: Int!, $nextToken: String) {
+    search(query: $query, mode: ${mode}, limit: $limit, nextToken: $nextToken) {
+      nextToken
+      results {
+        __typename
+        ... on MyProfile {
+          ... myProfileFields
+        }
+        ... on OtherProfile {
+          ... otherProfileFields
+        }
+        ... on Tweet {
+          ... tweetFields
+        }
+        ... on Reply {
+          ... replyFields
+        }
+      }
+    }
+  }`;
+
+  const variables = {
+    query,
+    limit,
+    nextToken,
+  };
+
+  const data = await GraphQL(process.env.API_URL, search, variables, user.accessToken);
+  const result = data.search;
+
+  return result;
+};
+
 module.exports = {
   we_invoke_confirmUserSignUp,
   we_invoke_getImageUploadUrl,
@@ -666,4 +700,5 @@ module.exports = {
   a_user_calls_getProfile,
   a_users_calls_getFollowers,
   a_users_calls_getFollowing,
+  a_users_calls_search,
 };
