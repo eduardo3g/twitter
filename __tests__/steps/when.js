@@ -672,6 +672,40 @@ const a_users_calls_search = async (user, mode, query, limit, nextToken) => {
   return result;
 };
 
+const a_users_calls_getHashTag = async (user, mode, hashTag, limit, nextToken) => {
+  const getHashTag = `query getHashTag($hashTag: String!, $limit: Int!, $nextToken: String) {
+    getHashTag(hashTag: $hashTag, mode: ${mode}, limit: $limit, nextToken: $nextToken) {
+      nextToken
+      results {
+        __typename
+        ... on MyProfile {
+          ... myProfileFields
+        }
+        ... on OtherProfile {
+          ... otherProfileFields
+        }
+        ... on Tweet {
+          ... tweetFields
+        }
+        ... on Reply {
+          ... replyFields
+        }
+      }
+    }
+  }`;
+
+  const variables = {
+    hashTag,
+    limit,
+    nextToken,
+  };
+
+  const data = await GraphQL(process.env.API_URL, getHashTag, variables, user.accessToken);
+  const result = data.getHashTag;
+
+  return result;
+};
+
 module.exports = {
   we_invoke_confirmUserSignUp,
   we_invoke_getImageUploadUrl,
@@ -701,4 +735,5 @@ module.exports = {
   a_users_calls_getFollowers,
   a_users_calls_getFollowing,
   a_users_calls_search,
+  a_users_calls_getHashTag,
 };
