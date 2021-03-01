@@ -71,7 +71,7 @@ async function searchLatest(context, hashTag, limit, nextToken) {
   );
 
   const searchParams = parseNextToken(nextToken) || {
-    facetFiltering: [`hashTags:${hashTag}`],
+    facetFilters: [`hashTags:${hashTag}`],
     hitsPerPage: limit,
     page: 0,
   };
