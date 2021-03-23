@@ -215,6 +215,22 @@ functions:
         Resource:
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+  notify:
+    handler: functions/notify.handler
+    environment:
+      GRAPHQL_API_URL: !GetAtt TwitterGraphQlApi.GraphQLUrl
+      TWEETS_TABLE: !Ref TweetsTable
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt TweetsTable.StreamArn
+    iamRoleStatements:
+      - Effect: Allow
+        Action: appsync:GraphQL
+        Resource: !Sub ${TwitterGraphQlApi.Arn}/* # Got from the template-update-stack on .serverless folder
+      - Effect: Allow
+        Action: dynamodb:GetItem
+        Resource: !GetAtt TweetsTable.Arn
 resources:
   Resources:
     UsersTable:
@@ -391,6 +407,34 @@ resources:
             Value: ${self:custom.stage}
           - Key: Name
             Value: relationships-table
+    NotificationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: buUserId
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: id
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        Tags:
+          - Key: Environment
+            Value: ${self:custom.stage}
+          - Key: Name
+            Value: notifications-table
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:

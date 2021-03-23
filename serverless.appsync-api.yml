@@ -99,7 +99,9 @@ mappingTemplates:
   - type: Mutation
     field: unfollow
     dataSource: unfollowMutation
-
+  - type: Mutation
+    field: notifyRetweeted
+    dataSource: notificationsTable
   # NESTED FIELDS
   - type: Tweet
     field: profile
@@ -194,6 +196,10 @@ dataSources:
     name: relationshipsTable
     config:
       tableName: !Ref RelationshipsTable
+  - type: AMAZON_DYNAMODB
+    name: notificationsTable
+    config:
+      tableName: !Ref NotificationsTable
   - type: AMAZON_DYNAMODB
     name: likeMutation
     config:
