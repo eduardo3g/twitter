@@ -231,6 +231,22 @@ functions:
       - Effect: Allow
         Action: dynamodb:GetItem
         Resource: !GetAtt TweetsTable.Arn
+  notifyLiked:
+    handler: functions/notify-liked.handler
+    environment:
+      GRAPHQL_API_URL: !GetAtt TwitterGraphQlApi.GraphQLUrl
+      TWEETS_TABLE: !Ref TweetsTable
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt LikesTable.StreamArn
+    iamRoleStatements:
+      - Effect: Allow
+        Action: appsync:GraphQL
+        Resource: !Sub ${TwitterGraphQlApi.Arn}/* # Got from the template-update-stack on .serverless folder
+      - Effect: Allow
+        Action: dynamodb:GetItem
+        Resource: !GetAtt TweetsTable.Arn
 resources:
   Resources:
     UsersTable:
@@ -351,6 +367,8 @@ resources:
             AttributeType: S
           - AttributeName: tweetId
             AttributeType: S
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         Tags:
           - Key: Environment
             Value: ${self:custom.stage}
