@@ -12,7 +12,7 @@ module.exports.handler = async (event) => {
     numeric: true
   });
 
-  const screenName = `${name.replace(/[^a-zA-Z0-9]/g, '')}${suffix}}`;
+  const screenName = `${name.replace(/[^a-zA-Z0-9]/g, '')}${suffix}`;
 
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const user = {
