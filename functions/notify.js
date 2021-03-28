@@ -16,6 +16,9 @@ module.exports.handler = async (event) => {
         case TweetTypes.RETWEET:
           await notifyRetweet(tweet);
           break;
+        case TweetTypes.REPLY:
+          await notifyReply(tweet.inReplyToUserIds, tweet);
+          break;
       }
 
       if (tweet.text) {
@@ -66,11 +69,48 @@ async function notifyRetweet(tweet) {
   });
 };
 
+async function notifyReply(userIds, tweet) {
+  const promises = userIds.map(userId => {
+    mutate(graphql`mutation notifyReplied(
+      $id: ID!
+      $userId: ID!
+      $tweetId: ID!
+      $replyTweetId: ID!
+      $repliedBy: ID!
+    ) {
+      notifyReplied(
+        id: $id
+        userId: $userId
+        tweetId: $tweetId
+        replyTweetId: $replyTweetId
+        repliedBy: $repliedBy
+      ) {
+        __typename
+        ... on Replied {
+          id
+          type
+          userId
+          tweetId
+          repliedBy
+          replyTweetId
+          createdAt
+        }
+      }
+    }`, {
+      id: ulid.ulid(),
+      userId,
+      tweetId: tweet.inReplyToTweetId,
+      replyTweetId: tweet.id,
+      repliedBy: tweet.creator,
+    });
+  });
+
+  await Promise.all(promises);
+};
+
 async function notifyMentioned(screenNames, tweet) {
   const promises = screenNames.map(async screenName => {
     const user = await getUserByScreenName(screenName.replace('@', ''));
-
-    console.log('USER MENTIONED', user);
 
     if (!user) {
       return;
@@ -105,8 +145,6 @@ async function notifyMentioned(screenNames, tweet) {
       mentionedByTweetId: tweet.id,
     });
   });
-
-  console.log('COMPLETED MUTATION');
 
   await Promise.all(promises);
 };
