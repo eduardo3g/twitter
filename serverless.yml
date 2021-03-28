@@ -444,7 +444,7 @@ resources:
           - AttributeName: userId
             AttributeType: S
         GlobalSecondaryIndexes:
-          - IndexName: buUserId
+          - IndexName: byUserId
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
