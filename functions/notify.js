@@ -70,8 +70,8 @@ async function notifyRetweet(tweet) {
 };
 
 async function notifyReply(userIds, tweet) {
-  const promises = userIds.map(userId => {
-    mutate(graphql`mutation notifyReplied(
+  const promises = userIds.map(userId => 
+    mutate(graphql `mutation notifyReplied(
       $id: ID!
       $userId: ID!
       $tweetId: ID!
@@ -102,11 +102,11 @@ async function notifyReply(userIds, tweet) {
       tweetId: tweet.inReplyToTweetId,
       replyTweetId: tweet.id,
       repliedBy: tweet.creator,
-    });
-  });
+    })
+  );
 
   await Promise.all(promises);
-};
+}
 
 async function notifyMentioned(screenNames, tweet) {
   const promises = screenNames.map(async screenName => {
