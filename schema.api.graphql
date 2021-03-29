@@ -238,10 +238,10 @@ type SearchResultsPage {
   nextToken: String
 }
 
-union HashTagResultResult = MyProfile | OtherProfile | Tweet | Reply
+union HashTagResult = MyProfile | OtherProfile | Tweet | Reply
 
 type HashTagResultsPage {
-  results: [HashTagResultResult!]
+  results: [HashTagResult!]
   nextToken: String
 }
 
