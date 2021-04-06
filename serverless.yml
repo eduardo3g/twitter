@@ -5,7 +5,6 @@ plugins:
   - serverless-appsync-plugin
   - serverless-iam-roles-per-function
   - serverless-export-env
-  - serverless-manifest-plugin
 
 provider:
   name: aws
@@ -518,3 +517,6 @@ resources:
 
     WebCognitoUserPoolClientId:
       Value: !Ref WebUserPoolClient
+
+    ApiUrl:
+      Value: !GetAtt TwitterGraphQlApi.GraphQLUrl # Got from CloudFormation template update stack (.serverless folder)
