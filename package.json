@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "exportEnv": "sls export-env && sls manifest",
-    "exportEnvStaging": "sls export-env -s staging && sls manifest -s staging",
+    "exportEnv": "sls export-env",
+    "exportEnvStaging": "sls export-env -s staging",
     "jest": "jest",
     "test": "jest --verbose ./__tests__/test_cases/unit --silent",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
@@ -44,7 +44,6 @@
     "serverless-appsync-plugin": "^1.4.0",
     "serverless-export-env": "^1.4.0",
     "serverless-iam-roles-per-function": "^2.0.2",
-    "serverless-manifest-plugin": "^1.0.6",
     "utf-8-validate": "^5.0.4",
     "ws": "^7.4.4"
   },
