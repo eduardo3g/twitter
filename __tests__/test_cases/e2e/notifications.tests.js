@@ -8,6 +8,7 @@ const retry = require('async-retry');
 const given = require('../../steps/given');
 const when = require('../../steps/when');
 
+console.warn = jest.fn(); // silence warning console logs thrown by Apollo regarding the usage of unions in GraphQL
 console.error = jest.fn(); // silence error console logs thrown by Apollo regarding the usage of unions in GraphQL
 
 describe('Gven two authenticated users', () => {
@@ -50,6 +51,10 @@ describe('Gven two authenticated users', () => {
                 retweetedBy
                 retweetId
               }
+              ... on Liked {
+                tweetId
+                likedBy
+              }
             }
           }
         `,
@@ -85,6 +90,30 @@ describe('Gven two authenticated users', () => {
                 tweetId: userAsTweet.id,
                 retweetId: userBsRetweet.id,
                 retweetedBy: userB.username,
+              }),
+            ]),
+          );
+        }, {
+          retires: 10,
+          maxTimeout: 1000,
+        });
+      }, 15000);
+    });
+
+    describe("When user B likes user A's tweet", () => {
+      beforeAll(async () => {
+        await when.a_user_calls_like(userB, userAsTweet.id);
+      });
+
+      it('User A should receive a notification', async () => {
+        await retry(async () => {
+          expect(notifications).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                type: 'Liked',
+                userId: userA.username,
+                tweetId: userAsTweet.id,
+                likedBy: userB.username,
               }),
             ]),
           );
