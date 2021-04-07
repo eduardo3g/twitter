@@ -76,6 +76,8 @@ describe('Gven two authenticated users', () => {
           notifications.push(response.data.onNotified)
         }
       });
+
+      return new Promise(resolve => setTimeout(resolve, 10000));
     });
 
     afterAll(() => {
