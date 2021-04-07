@@ -12,11 +12,12 @@ console.warn = jest.fn(); // silence warning console logs thrown by Apollo regar
 console.error = jest.fn(); // silence error console logs thrown by Apollo regarding the usage of unions in GraphQL
 
 describe('Gven two authenticated users', () => {
-  let userA, userB, userAsTweet;
+  let userA, userB, userAsProfile, userAsTweet;
   const text = chance.string({ length: 16 });
 
   beforeAll(async () => {
     userA = await given.an_authenticated_user();
+    userAsProfile = await when.a_user_calls_getMyProfile(userA);
     userB = await given.an_authenticated_user();
     userAsTweet = await when.a_user_calls_tweet(userA, text);
   });
@@ -60,6 +61,10 @@ describe('Gven two authenticated users', () => {
                 replyTweetId
                 repliedBy
               }
+              ... on Mentioned {
+                mentionedBy
+                mentionedByTweetId
+              }
             }
           }
         `,
@@ -71,7 +76,6 @@ describe('Gven two authenticated users', () => {
           notifications.push(response.data.onNotified)
         }
       });
-
     });
 
     afterAll(() => {
@@ -151,6 +155,33 @@ describe('Gven two authenticated users', () => {
                 tweetId: userAsTweet.id,
                 repliedBy: userB.username,
                 replyTweetId: userBsReply.id,
+              }),
+            ]),
+          );
+        }, {
+          retries: 10,
+          maxTimeout: 1000,
+        });
+      }, 15000);
+    });
+
+    describe("When user B mentions user A in a tweet", () => {
+      let userBsTweet;
+
+      beforeAll(async () => {
+        const text = `Hey @${userAsProfile.screenName}`;
+        userBsTweet = await when.a_user_calls_tweet(userB, text);
+      });
+
+      it('User A should receive a notification', async () => {
+        await retry(async () => {
+          expect(notifications).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                type: 'Mentioned',
+                userId: userA.username,
+                mentionedByTweetId: userBsTweet.id,
+                mentionedBy: userB.username,
               }),
             ]),
           );
