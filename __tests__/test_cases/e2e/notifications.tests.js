@@ -55,6 +55,11 @@ describe('Gven two authenticated users', () => {
                 tweetId
                 likedBy
               }
+              ... on Replied {
+                tweetId
+                replyTweetId
+                repliedBy
+              }
             }
           }
         `,
@@ -94,7 +99,7 @@ describe('Gven two authenticated users', () => {
             ]),
           );
         }, {
-          retires: 10,
+          retries: 10,
           maxTimeout: 1000,
         });
       }, 15000);
@@ -118,7 +123,39 @@ describe('Gven two authenticated users', () => {
             ]),
           );
         }, {
-          retires: 10,
+          retries: 10,
+          maxTimeout: 1000,
+        });
+      }, 15000);
+    });
+
+    describe("When user B replies to user A's tweet", () => {
+      let userBsReply;
+      const replyText = chance.string({ length: 16 });
+
+      beforeAll(async () => {
+        userBsReply = await when.a_user_calls_reply(
+          userB,
+          userAsTweet.id,
+          replyText
+        );
+      });
+
+      it('User A should receive a notification', async () => {
+        await retry(async () => {
+          expect(notifications).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                type: 'Replied',
+                userId: userA.username,
+                tweetId: userAsTweet.id,
+                repliedBy: userB.username,
+                replyTweetId: userBsReply.id,
+              }),
+            ]),
+          );
+        }, {
+          retries: 10,
           maxTimeout: 1000,
         });
       }, 15000);
