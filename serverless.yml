@@ -248,6 +248,18 @@ functions:
       - Effect: Allow
         Action: dynamodb:GetItem
         Resource: !GetAtt TweetsTable.Arn
+  sendDirectMessage:
+    handler: functions/send-direct-message.handler
+    environment:
+      CONVERSATIONS_TABLE: !Ref ConversationsTable
+      DIRECT_MESSAGES_TABLE: !Ref DirectMessagesTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:PutItem
+        Resource: !GetAtt DirectMessagesTable.Arn
+      - Effect: Allow
+        Action: dynamodb:UpdateItem
+        Resource: !GetAtt ConversationsTable.Arn
 resources:
   Resources:
     UsersTable:
