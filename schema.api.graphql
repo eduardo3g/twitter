@@ -317,7 +317,7 @@ enum NotificationType {
 
 type Conversation {
   id: ID!
-  otherUserId: OtherProfile!
+  otherUser: OtherProfile!
   lastMessage: String!
   lastModified: AWSDateTime!
 }
