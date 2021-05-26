@@ -21,7 +21,7 @@ module.exports.handler = async (event) => {
           conversationId,
           messageId: ulid.ulid(),
           message,
-          fromt: username,
+          from: username,
           timestamp,
         },
       },
