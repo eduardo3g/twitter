@@ -468,12 +468,14 @@ resources:
             AttributeType: S
           - AttributeName: otherUserId
             AttributeType: S
+          - AttributeName: lastModified
+            AttributeType: S
         GlobalSecondaryIndexes:
           - IndexName: byUserId
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
-              - AttributeName: id
+              - AttributeName: lastModified
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
@@ -482,6 +484,27 @@ resources:
             Value: ${self:custom.stage}
           - Key: Name
             Value: conversations-table
+    DirectMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: conversationId
+            KeyType: HASH
+          - AttributeName: messageId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: conversationId
+            AttributeType: S
+          - AttributeName: messageId
+            AttributeType: S
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        Tags:
+          - Key: Environment
+            Value: ${self:custom.stage}
+          - Key: Name
+            Value: direct-messages-table
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
