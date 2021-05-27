@@ -173,6 +173,9 @@ mappingTemplates:
   - type: OtherProfile
     field: followedBy
     dataSource: relationshipsTable
+  - type: Conversation
+    field: otherUser
+    dataSource: usersTable
 
 functionConfigurations:
   - name: getFollowers
