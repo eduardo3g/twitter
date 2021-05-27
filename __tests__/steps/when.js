@@ -140,6 +140,17 @@ fragment iTweetFields on ITweet {
 }
 `;
 
+const conversationFragment = `
+fragment conversationFields on Conversation {
+  id
+  otherUser {
+    ...otherProfileFields
+  }
+  lastMessage
+  lastModified
+}
+`;
+
 registerFragment('myProfileFields', myProfileFragment);
 registerFragment('otherProfileFields', otherProfileFragment);
 registerFragment('iProfileFields', iProfileFragment);
@@ -147,6 +158,7 @@ registerFragment('tweetFields', tweetFragment);
 registerFragment('retweetFields', retweetFragment);
 registerFragment('replyFields', replyFragment);
 registerFragment('iTweetFields', iTweetFragment);
+registerFragment('conversationFields', conversationFragment);
 
 const we_invoke_confirmUserSignUp = async (username, name, email) => {
   const handler = require('../../functions/confirm-user-signup').handler;
@@ -706,6 +718,27 @@ const a_users_calls_getHashTag = async (user, mode, hashTag, limit, nextToken) =
   return result;
 };
 
+const a_user_calls_sendDirectMessage = async (user, otherUserId, message) => {
+  const sendDirectMessage = `mutation sendDirectMessage($otherUserId: ID!, $message: String!) {
+    sendDirectMessage(
+      otherUserId: $otherUserId
+      message: $message
+    ) {
+      ...conversationFields
+    }
+  }`;
+
+  const variables = {
+    otherUserId,
+    message,
+  };
+
+  const data = await GraphQL(process.env.API_URL, sendDirectMessage, variables, user.accessToken);
+  const result = data.sendDirectMessage;
+
+  return result;
+};
+
 module.exports = {
   we_invoke_confirmUserSignUp,
   we_invoke_getImageUploadUrl,
@@ -736,4 +769,5 @@ module.exports = {
   a_users_calls_getFollowing,
   a_users_calls_search,
   a_users_calls_getHashTag,
+  a_user_calls_sendDirectMessage
 };
