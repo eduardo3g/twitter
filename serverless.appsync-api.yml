@@ -78,6 +78,10 @@ mappingTemplates:
   - type: Query
     field: listConversations
     dataSource: conversationsTable
+  - type: Query
+    field: getDirectMessages
+    dataSource: directMessagesTable
+
   - type: Mutation
     field: retweet
     dataSource: retweetFunction
