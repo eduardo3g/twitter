@@ -183,6 +183,9 @@ mappingTemplates:
   - type: Conversation
     field: otherUser
     dataSource: usersTable
+  - type: Message
+    field: from
+    dataSource: usersTable
 
 functionConfigurations:
   - name: getFollowers
