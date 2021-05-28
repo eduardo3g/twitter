@@ -25,5 +25,34 @@ describe('Given two authenticated users', () => {
     it("The conversation's lastMessage should be user A's message", () => {
       expect(conversation.lastMessage).toEqual(message);
     });
+
+    it('User A should see the conversation when he calls listConversations', async () => {
+      const { conversations, nextToken } = await when.a_user_calls_listConversations(
+        userA,
+        10
+      );
+
+      expect(nextToken).toBeNull();
+      expect(conversations).toHaveLength(1);
+      expect(conversations[0]).toEqual(conversation);
+    });
+
+    it('User B should see the conversation when he calls listConversations', async () => {
+      const { conversations, nextToken } = await when.a_user_calls_listConversations(
+        userB,
+        10
+      );
+
+      expect(nextToken).toBeNull();
+      expect(conversations).toHaveLength(1);
+      expect(conversations[0]).toMatchObject({
+        id: conversation.id,
+        lastMessage: message,
+        lastModified: conversation.lastModified,
+        otherUser: {
+          id: userA.username,
+        },
+      });
+    });
   });
 });
