@@ -75,6 +75,9 @@ mappingTemplates:
     dataSource: getHashTagFunction
     request: false
     response: false
+  - type: Query
+    field: listConversations
+    dataSource: conversationsTable
   - type: Mutation
     field: retweet
     dataSource: retweetFunction
