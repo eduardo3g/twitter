@@ -54,5 +54,41 @@ describe('Given two authenticated users', () => {
         },
       });
     });
+
+    it('User A should see the message when eh calls getDirectMessages for a conversation', async () => {
+      const { messages, nextToken } = await when.a_user_calls_getDirectMessages(
+        userA, 
+        userB.username, 
+        10
+      );
+
+      expect(nextToken).toBeNull();
+      expect(messages).toHaveLength(1);
+      expect(messages[0]).toMatchObject({
+        from: {
+          id: userA.username
+        },
+        message,
+      });
+    });
+
+    it('User B should see the message when he calls getDirectMessages for a conversation', async () => {
+      const { messages, nextToken } = await when.a_user_calls_getDirectMessages(
+        userB, 
+        userA.username, 
+        10
+      );
+
+      expect(nextToken).toBeNull();
+      expect(messages).toHaveLength(1);
+      expect(messages[0]).toMatchObject({
+        from: {
+          id: userA.username
+        },
+        message,
+      });
+    });
+
+    
   });
 });
