@@ -1,5 +1,5 @@
 <p align="center">
-   <img alt="Twitter logo" src="./.github/docs/images/logo.png" width="200px" />
+   <img alt="Twitter logo" src="./.github/docs/images/logo.png" width="150px" />
 </p>
 
 
@@ -56,7 +56,7 @@ Sounds fun, right? 🤟
 
 # 🐞 Issues
 
-Feel free to <b>create a new issue</b> with an detailed title and description. If you already have a solution to fix the problem, I would be very happy to review your pull request.
+Feel free to <b>create a new issue</b> with an detailed title and description. If you already have a solution to fix the problem, I would be very happy to <b>review your pull request</b>.
 
 # 🎉 Contributing
 
