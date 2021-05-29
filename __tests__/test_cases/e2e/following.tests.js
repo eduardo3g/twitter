@@ -195,23 +195,22 @@ describe('Given authenticated users, user A and B', () => {
       expect(followedBy).toBe(false);
     });
 
-    // it("Should remove user B's tweet to user A's timeline", async () => {
-    //   retry(async () => {
-    //     const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
+    it("Should remove user B's tweet to user A's timeline", async () => {
+      retry(async () => {
+        const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
 
-    //     expect(tweets).toHaveLength(1);
-    //     expect(tweets).toEqual([
-    //       expect.objectContaining({
-    //         profile: {
-    //           id: userA.username,
-    //         },
-    //       }),
-    //     ]);
-    //   }, {
-    //     retries: 3,
-    //     maxTimeout: 1000,
-    //   });
-    // });
+        expect(tweets).toHaveLength(1);
+        expect(tweets).toEqual([
+          expect.objectContaining({
+            profile: {
+              id: userA.username,
+            },
+          }),
+        ]);
+      }, {
+        retries: 3,
+        maxTimeout: 1000,
+      });
+    });
   });
-
 });
