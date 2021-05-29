@@ -37,6 +37,7 @@ functions:
       - Effect: Allow
         Action: dynamodb:PutItem
         Resource: !GetAtt UsersTable.Arn
+
   getImageUploadUrl:
     handler: functions/get-upload-url.handler
     environment:
@@ -47,6 +48,7 @@ functions:
           - s3:PutObject
           - s3:PutObjectAcl
         Resource: !Sub ${AssetsBucket.Arn}/*
+
   tweet:
     handler: functions/tweet.handler
     environment:
@@ -62,6 +64,7 @@ functions:
         Resource:
           - !GetAtt TweetsTable.Arn
           - !GetAtt TimelinesTable.Arn
+
   retweet:
     handler: functions/retweet.handler
     environment:
@@ -84,6 +87,7 @@ functions:
           - !GetAtt TweetsTable.Arn
           - !GetAtt TimelinesTable.Arn
           - !GetAtt RetweetsTable.Arn
+
   unretweet:
     handler: functions/unretweet.handler
     environment:
@@ -109,6 +113,7 @@ functions:
           - !GetAtt TweetsTable.Arn
           - !GetAtt TimelinesTable.Arn
           - !GetAtt RetweetsTable.Arn
+
   reply:
     handler: functions/reply.handler
     environment:
@@ -129,6 +134,7 @@ functions:
         Resource:
           - !GetAtt TweetsTable.Arn
           - !GetAtt TimelinesTable.Arn
+
   distributeTweets:
     handler: functions/distribute-tweets.handler
     environment:
@@ -148,6 +154,7 @@ functions:
       - Effect: Allow
         Action: dynamodb:Query
         Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
+
   distributeTweetsToFollower:
     handler: functions/distribute-tweets-to-follower.handler
     environment:
@@ -172,6 +179,7 @@ functions:
           - dynamodb:PutItem
           - dynamodb:DeleteItem
         Resource: !GetAtt TimelinesTable.Arn
+
   syncUsersToAlgolia:
     handler: functions/sync-users-to-algolia.handler
     events:
@@ -184,6 +192,7 @@ functions:
         Resource:
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+
   syncTweetsToAlgolia:
     handler: functions/sync-tweets-to-algolia.handler
     events:
@@ -196,6 +205,7 @@ functions:
         Resource:
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+
   search:
     handler: functions/search.handler
     iamRoleStatements:
@@ -204,6 +214,7 @@ functions:
         Resource:
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+
   getHashTag:
     handler: functions/getHashTag.handler
     iamRoleStatements:
@@ -212,6 +223,7 @@ functions:
         Resource:
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
           - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+
   notify:
     handler: functions/notify.handler
     environment:
@@ -232,6 +244,7 @@ functions:
       - Effect: Allow
         Action: dynamodb:Query
         Resource: !Sub ${UsersTable.Arn}/index/byScreenName
+
   notifyLiked:
     handler: functions/notify-liked.handler
     environment:
@@ -248,6 +261,7 @@ functions:
       - Effect: Allow
         Action: dynamodb:GetItem
         Resource: !GetAtt TweetsTable.Arn
+
   sendDirectMessage:
     handler: functions/send-direct-message.handler
     environment:
@@ -260,319 +274,29 @@ functions:
       - Effect: Allow
         Action: dynamodb:UpdateItem
         Resource: !GetAtt ConversationsTable.Arn
+
 resources:
   Resources:
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: screenName
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: byScreenName
-            KeySchema:
-              - AttributeName: screenName
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: users-table
-    TweetsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: creator
-            AttributeType: S
-          - AttributeName: retweetOf
-            AttributeType: S
-          - AttributeName: inReplyToTweetId
-            AttributeType: S    
-        GlobalSecondaryIndexes:
-          - IndexName: byCreator
-            KeySchema:
-              - AttributeName: creator
-                KeyType: HASH
-              - AttributeName: id #tweet Id
-                KeyType: RANGE # sort key       
-            Projection:
-              ProjectionType: ALL # get all properties from Tweet item, instead of just creater and id
-          - IndexName: retweetsByCreator
-            KeySchema:
-              - AttributeName: creator
-                KeyType: HASH
-              - AttributeName: retweetOf
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          - IndexName: repliesForTweet
-            KeySchema:
-              - AttributeName: inReplyToTweetId
-                KeyType: HASH
-              - AttributeName: id
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: tweets-table
-    TimelinesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: tweetId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: tweetId
-            AttributeType: S
-          - AttributeName: distributedFrom
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: byDistributedFrom
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: distributedFrom
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL         
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: timelines-table
-    LikesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: tweetId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: tweetId
-            AttributeType: S
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: likes-table
-    RetweetsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: tweetId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: tweetId
-            AttributeType: S
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: retweets-table
-    RelationshipsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: sk
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: sk
-            AttributeType: S
-          - AttributeName: otherUserId
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: byOtherUser
-            KeySchema:
-              - AttributeName: otherUserId
-                KeyType: HASH
-              - AttributeName: sk
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: relationships-table
-    NotificationsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-          - AttributeName: userId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: userId
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: byUserId
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: id
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: notifications-table
-    ConversationsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-          - AttributeName: otherUserId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: otherUserId
-            AttributeType: S
-          - AttributeName: lastModified
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: byUserId
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: lastModified
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: conversations-table
-    DirectMessagesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: conversationId
-            KeyType: HASH
-          - AttributeName: messageId
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: conversationId
-            AttributeType: S
-          - AttributeName: messageId
-            AttributeType: S
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        Tags:
-          - Key: Environment
-            Value: ${self:custom.stage}
-          - Key: Name
-            Value: direct-messages-table
-    CognitoUserPool:
-      Type: AWS::Cognito::UserPool
-      Properties:
-        AutoVerifiedAttributes:
-          - email
-        Policies:
-          PasswordPolicy:
-            MinimumLength: 8
-            RequireLowercase: false
-            RequireNumbers: false
-            RequireUppercase: false
-            RequireSymbols: false
-        UsernameAttributes:
-          - email
-        Schema:
-          - AttributeDataType: String
-            Name: name
-            Required: false
-            Mutable: true
-        LambdaConfig:
-          PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
-    UserPoolInvokeConfirmUserSignupLambdaPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        Action: lambda:invokeFunction
-        FunctionName: !Ref ConfirmUserSignupLambdaFunction
-        Principal: cognito-idp.amazonaws.com
-        SourceArn: !GetAtt CognitoUserPool.Arn
-    WebUserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties:
-        UserPoolId:  !Ref CognitoUserPool
-        ClientName: web
-        ExplicitAuthFlows:
-          - ALLOW_USER_SRP_AUTH
-          - ALLOW_USER_PASSWORD_AUTH
-          - ALLOW_REFRESH_TOKEN_AUTH
-        PreventUserExistenceErrors: ENABLED
-    AssetsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        AccelerateConfiguration:
-          AccelerationStatus: Enabled # Required to use Transfer Acceleration
-        CorsConfiguration:
-          CorsRules:
-            - AllowedMethods:
-                - GET
-                - PUT
-              AllowedOrigins:
-                - '*'
-              AllowedHeaders:
-                - '*'
+    UsersTable: ${file(resources/dynamodb/UsersTable.yml):UsersTable}
+    TweetsTable: ${file(resources/dynamodb/TweetsTable.yml):TweetsTable}
+    TimelinesTable: ${file(resources/dynamodb/TimelinesTable.yml):TimelinesTable}
+    LikesTable: ${file(resources/dynamodb/LikesTable.yml):LikesTable}
+    RetweetsTable: ${file(resources/dynamodb/RetweetsTable.yml):RetweetsTable}
+    RelationshipsTable: ${file(resources/dynamodb/RelationshipsTable.yml):RelationshipsTable}
+    NotificationsTable: ${file(resources/dynamodb/NotificationsTable.yml):NotificationsTable}
+    ConversationsTable: ${file(resources/dynamodb/ConversationsTable.yml):ConversationsTable}
+    DirectMessagesTable: ${file(resources/dynamodb/DirectMessagesTable.yml):DirectMessagesTable}
+
+    CognitoUserPool: ${file(resources/cognito/CognitoUserPool.yml):CognitoUserPool}
+    UserPoolInvokeConfirmUserSignupLambdaPermission: ${file(resources/cognito/UserPoolInvokeConfirmUserSignupLambdaPermission.yml):UserPoolInvokeConfirmUserSignupLambdaPermission}
+    WebUserPoolClient: ${file(resources/cognito/WebUserPoolClient.yml):WebUserPoolClient}
+
+    AssetsBucket: ${file(resources/s3/AssetsBucket.yml):AssetsBucket}
 
   Outputs:
     AwsRegion:
         Value: ${self:custom.region}
+
     CognitoUserPoolId:
       Value: !Ref CognitoUserPool
 

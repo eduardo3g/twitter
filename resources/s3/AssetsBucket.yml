@@ -1,0 +1,14 @@
+AssetsBucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    AccelerateConfiguration:
+      AccelerationStatus: Enabled # Required to use Transfer Acceleration
+    CorsConfiguration:
+      CorsRules:
+        - AllowedMethods:
+            - GET
+            - PUT
+          AllowedOrigins:
+            - '*'
+          AllowedHeaders:
+            - '*'

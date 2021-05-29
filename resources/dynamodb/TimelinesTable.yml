@@ -1,0 +1,30 @@
+TimelinesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    BillingMode: PAY_PER_REQUEST
+    KeySchema:
+      - AttributeName: userId
+        KeyType: HASH
+      - AttributeName: tweetId
+        KeyType: RANGE
+    AttributeDefinitions:
+      - AttributeName: userId
+        AttributeType: S
+      - AttributeName: tweetId
+        AttributeType: S
+      - AttributeName: distributedFrom
+        AttributeType: S
+    GlobalSecondaryIndexes:
+      - IndexName: byDistributedFrom
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: distributedFrom
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL         
+    Tags:
+      - Key: Environment
+        Value: ${self:custom.stage}
+      - Key: Name
+        Value: timelines-table

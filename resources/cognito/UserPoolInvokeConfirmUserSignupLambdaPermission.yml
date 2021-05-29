@@ -1,0 +1,7 @@
+UserPoolInvokeConfirmUserSignupLambdaPermission:
+  Type: AWS::Lambda::Permission
+  Properties:
+    Action: lambda:invokeFunction
+    FunctionName: !Ref ConfirmUserSignupLambdaFunction
+    Principal: cognito-idp.amazonaws.com
+    SourceArn: !GetAtt CognitoUserPool.Arn

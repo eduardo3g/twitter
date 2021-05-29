@@ -1,0 +1,48 @@
+TweetsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    BillingMode: PAY_PER_REQUEST
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      - AttributeName: creator
+        AttributeType: S
+      - AttributeName: retweetOf
+        AttributeType: S
+      - AttributeName: inReplyToTweetId
+        AttributeType: S    
+    GlobalSecondaryIndexes:
+      - IndexName: byCreator
+        KeySchema:
+          - AttributeName: creator
+            KeyType: HASH
+          - AttributeName: id #tweet Id
+            KeyType: RANGE # sort key       
+        Projection:
+          ProjectionType: ALL # get all properties from Tweet item, instead of just creater and id
+      - IndexName: retweetsByCreator
+        KeySchema:
+          - AttributeName: creator
+            KeyType: HASH
+          - AttributeName: retweetOf
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+      - IndexName: repliesForTweet
+        KeySchema:
+          - AttributeName: inReplyToTweetId
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+    StreamSpecification:
+      StreamViewType: NEW_AND_OLD_IMAGES
+    Tags:
+      - Key: Environment
+        Value: ${self:custom.stage}
+      - Key: Name
+        Value: tweets-table
