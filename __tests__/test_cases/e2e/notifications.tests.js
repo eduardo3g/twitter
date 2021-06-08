@@ -65,6 +65,10 @@ describe('Gven two authenticated users', () => {
                 mentionedBy
                 mentionedByTweetId
               }
+              ... on DMed {
+                otherUserId
+                message
+              }
             }
           }
         `,
@@ -190,6 +194,32 @@ describe('Gven two authenticated users', () => {
         }, {
           retries: 10,
           maxTimeout: 1000,
+        });
+      }, 15000);
+    });
+
+    describe('When user B DMs user A', () => {
+      const message = chance.string({ length: 16 });
+
+      beforeAll(async () => {
+        await when.a_user_calls_sendDirectMessage(userB, userA.username, message);
+      });
+
+      it('User A should receive a notification', async () => {
+        await retry(async () => {
+          expect(notifications).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                userId: userA.username,
+                type: "DMed",
+                otherUserId: userB.username,
+                message,
+              })
+            ])
+          )
+        }, {
+          retries: 10,
+          maxTimeout: 1000
         });
       }, 15000);
     });
