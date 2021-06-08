@@ -262,6 +262,19 @@ functions:
         Action: dynamodb:GetItem
         Resource: !GetAtt TweetsTable.Arn
 
+  notifyDmed:
+      handler: functions/notify-dmed.handler
+      environment:
+        GRAPHQL_API_URL: !GetAtt TwitterGraphQlApi.GraphQLUrl
+      events:
+        - stream:
+            type: dynamodb
+            arn: !GetAtt DirectMessagesTable.StreamArn
+      iamRoleStatements:
+        - Effect: Allow
+          Action: appsync:GraphQL
+          Resource: !Sub ${TwitterGraphQlApi.Arn}/* # Got from the template-update-stack on .serverless folder
+
   sendDirectMessage:
     handler: functions/send-direct-message.handler
     environment:
