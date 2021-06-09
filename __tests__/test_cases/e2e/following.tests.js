@@ -1,6 +1,6 @@
 require('dotenv').config();
 const chance = require('chance').Chance();
-const { before } = require('lodash');
+// const { before } = require('lodash');
 const given = require('../../steps/given');
 const when = require('../../steps/when');
 const retry = require('async-retry');
@@ -82,7 +82,7 @@ describe('Given authenticated users, user A and B', () => {
     });
 
     it("Should add user B's tweet to user A's timeline", async () => {
-      retry(async () => {
+      await retry(async () => {
         const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
 
         expect(tweets).toHaveLength(2);
@@ -196,19 +196,21 @@ describe('Given authenticated users, user A and B', () => {
     });
 
     it("Should remove user B's tweet to user A's timeline", async () => {
-      retry(async () => {
+      await retry(async () => {
         const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25);
 
         expect(tweets).toHaveLength(1);
-        expect(tweets).toEqual([
-          expect.objectContaining({
-            profile: {
-              id: userA.username,
-            },
-          }),
-        ]);
+        expect(tweets[0].profile.id).toEqual(userA.username);
+
+        // expect(tweets).toEqual([
+        //   expect.objectContaining({
+        //     profile: {
+        //       id: userA.username,
+        //     },
+        //   }),
+        // ]);
       }, {
-        retries: 3,
+        retries: 5,
         maxTimeout: 1000,
       });
     });
