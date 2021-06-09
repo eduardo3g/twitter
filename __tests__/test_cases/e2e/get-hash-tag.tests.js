@@ -39,10 +39,10 @@ describe('Given an authenticated user', () => {
         screenName: userAsProfile.screenName,
       });
     }, {
-      retries: 5,
+      retries: 10,
       maxTimeout: 1000,
     });
-  }, 10000);
+  }, 30000);
 
   describe('When the user sends a tweet', () => {
     let tweet;
@@ -68,10 +68,10 @@ describe('Given an authenticated user', () => {
           text,
         });
       }, {
-        retries: 5,
+        retries: 10,
         maxTimeout: 1000,
       });
-    }, 10000);
+    }, 30000);
 
     describe('When the user replies to the tweet', () => {
       let reply;
@@ -102,10 +102,10 @@ describe('Given an authenticated user', () => {
             text,
           });
         }, {
-          retries: 5,
-          maxTimeout: 1000,
+          retries: 10,
+          maxTimeout: 2000,
         });
-      }, 10000);
+      }, 30000);
     });
   });
 });
