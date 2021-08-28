@@ -1,5 +1,5 @@
 service: twitter
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 plugins:
   - serverless-appsync-plugin
@@ -13,7 +13,7 @@ provider:
   region: eu-west-1
   environment:
     STAGE: ${self:custom.stage}
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
 
 package:
   exclude:
@@ -160,7 +160,7 @@ functions:
     environment:
       TWEETS_TABLE: !Ref TweetsTable
       TIMELINES_TABLE: !Ref TimelinesTable
-      MAX_TEETS: "100"
+      MAX_TWEETS: "100"
     events:
       - stream:
           type: dynamodb
@@ -263,17 +263,17 @@ functions:
         Resource: !GetAtt TweetsTable.Arn
 
   notifyDmed:
-      handler: functions/notify-dmed.handler
-      environment:
-        GRAPHQL_API_URL: !GetAtt TwitterGraphQlApi.GraphQLUrl
-      events:
-        - stream:
-            type: dynamodb
-            arn: !GetAtt DirectMessagesTable.StreamArn
-      iamRoleStatements:
-        - Effect: Allow
-          Action: appsync:GraphQL
-          Resource: !Sub ${TwitterGraphQlApi.Arn}/* # Got from the template-update-stack on .serverless folder
+    handler: functions/notify-dmed.handler
+    environment:
+      GRAPHQL_API_URL: !GetAtt TwitterGraphQlApi.GraphQLUrl
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt DirectMessagesTable.StreamArn
+    iamRoleStatements:
+      - Effect: Allow
+        Action: appsync:GraphQL
+        Resource: !Sub ${TwitterGraphQlApi.Arn}/* # Got from the template-update-stack on .serverless folder
 
   sendDirectMessage:
     handler: functions/send-direct-message.handler
@@ -308,7 +308,7 @@ resources:
 
   Outputs:
     AwsRegion:
-        Value: ${self:custom.region}
+      Value: ${self:custom.region}
 
     CognitoUserPoolId:
       Value: !Ref CognitoUserPool
