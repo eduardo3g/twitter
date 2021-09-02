@@ -13,7 +13,7 @@
 
   [![Author](https://img.shields.io/badge/author-eduardo3g-1da1f2?style=flat-square)](https://github.com/eduardo3g)
   [![Languages](https://img.shields.io/github/languages/count/eduardo3g/twitter?color=%1da1f2&style=flat-square)](#)
-  [![Stars](https://img.shields.io/github/stars/eduardo3g/twitter?color=1da1f2&style=flat-square)](https://github.com/LauraBeatris/laurabeatris.com/stargazers)
+  [![Stars](https://img.shields.io/github/stars/eduardo3g/twitter?color=1da1f2&style=flat-square)](https://github.com/eduardo3g/twitter/stargazers)
 </p>
 
 # 📚 Introduction
