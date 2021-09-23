@@ -1,13 +1,11 @@
 name: deploy dev
 
 on:
-  push:
   pull_request:
     branches: [main]
 
 jobs:
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     env:
@@ -16,7 +14,6 @@ jobs:
       AWS_DEFAULT_REGION: eu-west-1
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
