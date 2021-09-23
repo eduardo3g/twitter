@@ -1,6 +1,7 @@
 CognitoUserPool:
   Type: AWS::Cognito::UserPool
   Properties:
+    UserPoolName: ${self:custom.stage}-twitter-user-pool
     AutoVerifiedAttributes:
       - email
     Policies:
