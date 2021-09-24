@@ -6,6 +6,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-export-env
   - serverless-layers
+  - serverless-plugin-log-retention
 
 provider:
   name: aws
@@ -27,6 +28,7 @@ custom:
     - ${file(serverless.appsync-api.yml)}
   serverless-layers:
     layersDeploymentBucket: ${ssm:/twitterappsync/${self:custom.stage}/layer-deployment-bucket}
+  logRetentionInDays: 1
 
 functions:
   confirmUserSignup:
