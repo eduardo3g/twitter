@@ -31,10 +31,10 @@ custom:
   logRetentionInDays: 1
   appSyncCaching:
     default:
-    prod:
-      behavior: PER_RESOLVER_CACHING
-      ttl: 3600
-      type: T2_LARGE
+    # prod:
+    #   behavior: PER_RESOLVER_CACHING
+    #   ttl: 3600
+    #   type: LARGE
 
 functions:
   confirmUserSignup:
