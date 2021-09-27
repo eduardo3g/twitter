@@ -29,6 +29,12 @@ custom:
   serverless-layers:
     layersDeploymentBucket: ${ssm:/twitterappsync/${self:custom.stage}/layer-deployment-bucket}
   logRetentionInDays: 1
+  appSyncCaching:
+    default:
+    prod:
+      behavior: PER_RESOLVER_CACHING
+      ttl: 3600
+      type: T2_LARGE
 
 functions:
   confirmUserSignup:
