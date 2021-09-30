@@ -137,7 +137,7 @@ mappingTemplates:
     field: profile
     dataSource: getTweetCreatorFunction
     request: Tweet.profile.batchInvoke.request.vtl
-    response: false # because it is a Lambda resolver
+    response: Tweet.profile.batchInvoke.response.vtl
     caching:
       keys:
         - $context.identity.username
@@ -147,7 +147,7 @@ mappingTemplates:
     field: profile
     dataSource: getTweetCreatorFunction
     request: Tweet.profile.batchInvoke.request.vtl
-    response: false # because it is a Lambda resolver
+    response: Tweet.profile.batchInvoke.response.vtl
     caching:
       keys:
         - $context.identity.username
@@ -157,7 +157,7 @@ mappingTemplates:
     field: profile
     dataSource: getTweetCreatorFunction
     request: Tweet.profile.batchInvoke.request.vtl
-    response: false # because it is a Lambda resolver
+    response: Tweet.profile.batchInvoke.response.vtl
     caching:
       keys:
         - $context.identity.username
