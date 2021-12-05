@@ -1,0 +1,4 @@
+FirehoseLogGroup:
+  Type: AWS::Logs::LogGroup
+  Properties:
+    RetentionInDays: 14

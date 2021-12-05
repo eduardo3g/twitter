@@ -1,0 +1,5 @@
+FirehoseLogStream:
+  Type: AWS::Logs::LogStream
+  Properties:
+    LogGroupName:
+      Ref: FirehoseLogGroup
