@@ -1,0 +1,24 @@
+FirehoseStream:
+  Type: AWS::KinesisFirehose::DeliveryStream
+  Properties:
+    DeliveryStreamType: DirectPut # source will come from a PUT request sent from then client
+    ExtendedS3DestinationConfiguration: # required because S3 is the target destination
+      BucketARN: !GetAtt AnalyticsBucket.Arn
+      BufferingHints:
+        IntervalInSeconds: 60
+        SizeInMBs: 1
+      CloudWatchLoggingOptions:
+        Enabled: true
+        LogGroupName: !Ref FirehoseLogGroup
+        LogStreamName: !Ref FirehoseLogStream
+      CompressionFormat: GZIP
+      RoleARN: !GetAtt FirehoseDeliveryIamRole.Arn
+      Prefix: analytics/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/
+      ErrorOutputPrefix: analytics_errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}
+      ProcessingConfiguration:
+        Enabled: true
+        Processors:
+          - Type: Lambda
+            Parameters:
+              - ParameterName: LambdaArn
+                ParameterValue: !GetAtt FirehoseTransformerLambdaFunction.Arn

@@ -305,8 +305,13 @@ functions:
         Action: dynamodb:BatchGetItem
         Resource: !GetAtt UsersTable.Arn
 
+  firehoseTransformer:
+    handler: functions/firehose-transformer.handler
+    timeout: 61
+
 resources:
   Resources:
+    # DynamoDB
     UsersTable: ${file(resources/dynamodb/UsersTable.yml):UsersTable}
     TweetsTable: ${file(resources/dynamodb/TweetsTable.yml):TweetsTable}
     TimelinesTable: ${file(resources/dynamodb/TimelinesTable.yml):TimelinesTable}
@@ -317,11 +322,24 @@ resources:
     ConversationsTable: ${file(resources/dynamodb/ConversationsTable.yml):ConversationsTable}
     DirectMessagesTable: ${file(resources/dynamodb/DirectMessagesTable.yml):DirectMessagesTable}
 
+    # Cognito
     CognitoUserPool: ${file(resources/cognito/CognitoUserPool.yml):CognitoUserPool}
     UserPoolInvokeConfirmUserSignupLambdaPermission: ${file(resources/cognito/UserPoolInvokeConfirmUserSignupLambdaPermission.yml):UserPoolInvokeConfirmUserSignupLambdaPermission}
     WebUserPoolClient: ${file(resources/cognito/WebUserPoolClient.yml):WebUserPoolClient}
 
+    # S3
     AssetsBucket: ${file(resources/s3/AssetsBucket.yml):AssetsBucket}
+    AnalyticsBucket: ${file(resources/s3/AnalyticsBucket.yml):AnalyticsBucket}
+
+    # Kinesis
+    FirehoseStream: ${file(resources/kinesis/FirehoseStream.yml):FirehoseStream}
+
+    # Cloudwatch
+    FirehoseLogGroup: ${file(resources/cloudwatch/FirehoseLogGroup.yml):FirehoseLogGroup}
+    FirehoseLogStream: ${file(resources/cloudwatch/FirehoseLogStream.yml):FirehoseLogStream}
+
+    # IAM
+    FirehoseDeliveryIamRole: ${file(resources/iam/FirehoseDeliveryIamRole.yml):FirehoseDeliveryIamRole}
 
   Outputs:
     AwsRegion:
