@@ -326,6 +326,8 @@ resources:
     CognitoUserPool: ${file(resources/cognito/CognitoUserPool.yml):CognitoUserPool}
     UserPoolInvokeConfirmUserSignupLambdaPermission: ${file(resources/cognito/UserPoolInvokeConfirmUserSignupLambdaPermission.yml):UserPoolInvokeConfirmUserSignupLambdaPermission}
     WebUserPoolClient: ${file(resources/cognito/WebUserPoolClient.yml):WebUserPoolClient}
+    IdentityPool: ${file(resources/cognito/IdentityPool.yml):IdentityPool}
+    IdentityPoolRoleMapping: ${file(resources/cognito/IdentityPoolRoleMapping.yml):IdentityPoolRoleMapping}
 
     # S3
     AssetsBucket: ${file(resources/s3/AssetsBucket.yml):AssetsBucket}
@@ -340,6 +342,8 @@ resources:
 
     # IAM
     FirehoseDeliveryIamRole: ${file(resources/iam/FirehoseDeliveryIamRole.yml):FirehoseDeliveryIamRole}
+    UnauthedClientRole: ${file(resources/iam/UnauthedClientRole.yml):UnauthedClientRole}
+    AuthedClientRole: ${file(resources/iam/AuthedClientRole.yml):AuthedClientRole}
 
   Outputs:
     AwsRegion:
@@ -351,5 +355,14 @@ resources:
     WebCognitoUserPoolClientId:
       Value: !Ref WebUserPoolClient
 
+    CognitoUserPoolProviderName:
+      Value: !GetAtt CognitoUserPool.ProviderName
+
+    CognitoIdentityPoolId:
+      Value: !Ref IdentityPool
+
     ApiUrl:
       Value: !GetAtt TwitterGraphQlApi.GraphQLUrl # Got from CloudFormation template update stack (.serverless folder)
+
+    FirehoseStreamName:
+      Value: !Ref FirehoseStream
