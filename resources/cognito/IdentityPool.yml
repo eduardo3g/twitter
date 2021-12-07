@@ -1,0 +1,9 @@
+IdentityPool:
+  Type: AWS::Cognito::IdentityPool
+  Properties:
+    AllowUnauthenticatedIdentities: true
+    AllowClassicFlow: false
+    CognitoIdentityProviders:
+      - ClientId: !Ref WebUserPoolClient
+        ProviderName: !GetAtt CognitoUserPool.ProviderName
+        ServerSideTokenCheck: true
