@@ -45,6 +45,8 @@ type Query {
     limit: Int!
     nextToken: String
   ): MessagesPage!
+
+  getAnalyticsConfig: AnalyticsConfig
 }
 
 type Mutation {
@@ -355,4 +357,9 @@ type Message {
 type MessagesPage {
   messages: [Message!]
   nextToken: String
+}
+
+type AnalyticsConfig {
+  identityPoolId: ID!
+  streamName: String!
 }
