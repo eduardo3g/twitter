@@ -131,6 +131,9 @@ mappingTemplates:
     dataSource: sendDirectMessageFunction
     request: false
     response: false
+  - type: Query
+    field: getAnalyticsConfig
+    dataSource: none
 
   # NESTED FIELDS
   - type: Tweet
@@ -356,3 +359,5 @@ substitutions:
   LikesTable: !Ref LikesTable
   UsersTable: !Ref UsersTable
   RelationshipsTable: !Ref RelationshipsTable
+  FirehoseStreamName: !Ref FirehoseStream
+  IdentityPoolId: !Ref IdentityPool
