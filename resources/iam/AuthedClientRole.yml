@@ -23,3 +23,8 @@ AuthedClientRole:
                 - firehose:PutRecord
                 - firehose:PutRecordBatch
               Resource: !GetAtt FirehoseStream.Arn
+            - Effect: Allow
+              Action: appsync:GraphQL
+              Resource:
+                - !Sub ${TwitterGraphQlApi.Arn}/types/Query/fields/getAnalyticsConfig
+                - !Sub ${TwitterGraphQlApi.Arn}/types/AnalyticsConfig
