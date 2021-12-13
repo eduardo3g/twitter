@@ -47,6 +47,7 @@ type Query {
   ): MessagesPage!
 
   getAnalyticsConfig: AnalyticsConfig
+  @aws_iam @aws_cognito_user_pools
 }
 
 type Mutation {
@@ -359,7 +360,7 @@ type MessagesPage {
   nextToken: String
 }
 
-type AnalyticsConfig {
+type AnalyticsConfig @aws_iam @aws_cognito_user_pools {
   identityPoolId: ID!
   streamName: String!
 }
