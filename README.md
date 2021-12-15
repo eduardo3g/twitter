@@ -29,6 +29,7 @@ The entire application was built using Cloud-Native services provided by AWS.
 * 🗃️ <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html">AWS DynamoDB</a> - fully managed NoSQL database service that provides fast and predictable performance with seamless scalability.
 * 👮🏻 <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html">AWS Cognito</a> - provides authentication, authorization, and user management for your web and mobile apps.
 * 🍃 <a href="https://www.serverless.com/">Serverless Framework</a> - framework that speeds up the development of Serverless cloud-native applications.
+* 🚒 <a href="https://aws.amazon.com/kinesis/data-firehose/">Kinesis Firehose</a> - is an extract, transform, and load (ETL) service that reliably captures, transforms, and delivers streaming data to data lakes, data stores, and analytics services.
 * 🔍 <a href="https://www.algolia.com/">Algolia</a> - search-as-a-service platform similar to Elasticsearch.
 
 # 🖥️ Features
