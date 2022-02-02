@@ -35,6 +35,12 @@ custom:
     #   behavior: PER_RESOLVER_CACHING
     #   ttl: 3600
     #   type: LARGE
+  appSyncLogLevel:
+    default: ALL
+    prod: ERROR
+  appSyncLogExcludeVerboseContent:
+    default: false
+    prod: true
 
 functions:
   confirmUserSignup:
@@ -344,6 +350,7 @@ resources:
     FirehoseDeliveryIamRole: ${file(resources/iam/FirehoseDeliveryIamRole.yml):FirehoseDeliveryIamRole}
     UnauthedClientRole: ${file(resources/iam/UnauthedClientRole.yml):UnauthedClientRole}
     AuthedClientRole: ${file(resources/iam/AuthedClientRole.yml):AuthedClientRole}
+    AppSyncLoggingServiceRole: ${file(resources/iam/AppSyncLoggingServiceRole.yml):AppSyncLoggingServiceRole}
 
   Outputs:
     AwsRegion:
