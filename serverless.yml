@@ -7,6 +7,7 @@ plugins:
   - serverless-export-env
   - serverless-layers
   - serverless-plugin-log-retention
+  - serverless-plugin-ifelse
 
 provider:
   name: aws
@@ -41,6 +42,11 @@ custom:
   appSyncLogExcludeVerboseContent:
     default: false
     prod: true
+  serverlessIfElse:
+    - If: '"${self:custom.stage}" == "prod"' # don't do anything
+      ElseExclude:
+        - functions.setResolverLogLevelToAll
+        - functions.setResolverLogLevelToError
 
 functions:
   confirmUserSignup:
@@ -314,6 +320,40 @@ functions:
   firehoseTransformer:
     handler: functions/firehose-transformer.handler
     timeout: 61
+
+  setResolverLogLevelToAll:
+    handler: functions/set-resolver-log-level.handler
+    events:
+      - schedule: cron(6 * * * ? *) # 6 mins past the hour every hour
+    environment:
+      APPSYNC_API_ID: !GetAtt TwitterGraphQlApi.ApiId
+      FIELD_LOG_LEVEL: ALL
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - appsync:GetGraphqlApi
+          - appsync:UpdateGraphqlApi
+        Resource: !Ref TwitterGraphQlApi
+      - Effect: Allow
+        Action: iam:PassRole
+        Resource: !GetAtt AppSyncLoggingServiceRole.Arn
+
+  setResolverLogLevelToError:
+    handler: functions/set-resolver-log-level.handler
+    events:
+      - schedule: cron(12 * * * ? *) # 6 mins past the hour every hour
+    environment:
+      APPSYNC_API_ID: !GetAtt TwitterGraphQlApi.ApiId
+      FIELD_LOG_LEVEL: ERROR
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - appsync:GetGraphqlApi
+          - appsync:UpdateGraphqlApi
+        Resource: !Ref TwitterGraphQlApi
+      - Effect: Allow
+        Action: iam:PassRole
+        Resource: !GetAtt AppSyncLoggingServiceRole.Arn
 
 resources:
   Resources:
