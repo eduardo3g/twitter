@@ -16,6 +16,6 @@ DirectMessagesTable:
       StreamViewType: NEW_AND_OLD_IMAGES
     Tags:
       - Key: Environment
-        Value: ${self:custom.stage}
+        Value: ${sls:stage}
       - Key: Name
         Value: direct-messages-table
