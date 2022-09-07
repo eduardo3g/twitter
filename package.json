@@ -45,7 +45,7 @@
     "jest": "^26.6.3",
     "serverless": "3.22.0",
     "serverless-appsync-plugin": "^1.4.0",
-    "serverless-export-env": "^1.4.0",
+    "serverless-export-env": "^2.1.0",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-layers": "^2.5.4",
     "serverless-plugin-ifelse": "^1.0.7",
