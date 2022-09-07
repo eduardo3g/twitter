@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "exportEnv": "sls export-env",
+    "exportEnv": "sls export-env --all",
     "exportEnvStaging": "sls export-env -s staging",
     "jest": "jest",
     "test": "jest --verbose ./__tests__/test_cases/unit --silent",

@@ -1,6 +1,8 @@
 service: twitter
 frameworkVersion: "3"
 
+useDotenv: true
+
 params:
   dev:
     appSyncCaching: false
@@ -29,6 +31,11 @@ provider:
   environment:
     STAGE: ${sls:stage}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
+    AWS_REGION: ${self:custom.region}
+    COGNITO_USER_POOL_ID: !Ref CognitoUserPool
+    WEB_COGNITO_USER_POOL_CLIENT_ID: !Ref WebUserPoolClient
+    COGNITO_USER_POOL_PROVIDER_NAME: !GetAtt CognitoUserPool.ProviderName
+    COGNITO_IDENTITY_POOL_ID: !Ref IdentityPool
 
 package:
   exclude:
@@ -37,6 +44,8 @@ package:
 
 custom:
   region: ${opt:region, self:provider.region}
+  export-env:
+    overwrite: true
   appSync:
     - ${file(serverless.appsync-api.yml)}
   serverless-layers:
