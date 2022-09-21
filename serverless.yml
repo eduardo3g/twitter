@@ -1,5 +1,20 @@
 service: twitter
-frameworkVersion: "2"
+frameworkVersion: "3"
+
+useDotenv: true
+
+params:
+  dev:
+    appSyncCaching: false
+    appSyncLogLevel: ALL
+    appSyncLogExcludeVerboseContent: false
+  prod:
+    appSyncCaching:
+      behavior: PER_RESOLVER_CACHING
+      ttl: 3600
+      type: LARGE
+    appSyncLogLevel: ERROR
+    appSyncLogExcludeVerboseContent: true
 
 plugins:
   - serverless-appsync-plugin
@@ -11,10 +26,10 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   region: eu-west-1
   environment:
-    STAGE: ${self:custom.stage}
+    STAGE: ${sls:stage}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
 
 package:
@@ -24,26 +39,18 @@ package:
 
 custom:
   region: ${opt:region, self:provider.region}
-  stage: ${opt:stage, self:provider.stage}
+  export-env:
+    overwrite: true
   appSync:
     - ${file(serverless.appsync-api.yml)}
   serverless-layers:
-    layersDeploymentBucket: ${ssm:/twitterappsync/${self:custom.stage}/layer-deployment-bucket}
+    layersDeploymentBucket: ${ssm:/twitterappsync/${sls:stage}/layer-deployment-bucket}
   logRetentionInDays: 1
-  appSyncCaching:
-    default:
-    # prod:
-    #   behavior: PER_RESOLVER_CACHING
-    #   ttl: 3600
-    #   type: LARGE
-  appSyncLogLevel:
-    default: ALL
-    prod: ERROR
-  appSyncLogExcludeVerboseContent:
-    default: false
-    prod: true
+  appSyncCaching: ${param:appSyncCaching}
+  appSyncLogLevel: ${param:appSyncLogLevel}
+  appSyncLogExcludeVerboseContent: ${param:appSyncLogExcludeVerboseContent}
   serverlessIfElse:
-    - If: '"${self:custom.stage}" == "prod"' # don't do anything
+    - If: '"${sls:stage}" == "prod"' # don't do anything
       ElseExclude:
         - functions.setResolverLogLevelToAll
         - functions.setResolverLogLevelToError
@@ -186,7 +193,7 @@ functions:
           type: dynamodb
           arn: !GetAtt RelationshipsTable.StreamArn
     # Only required if the auto generated name exceeds 64 characters
-    iamRoleStatementsName: ${self:service}-${self:custom.stage}-distributeTweetsToFollower
+    iamRoleStatementsName: ${self:service}-${sls:stage}-distributeTweetsToFollower
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:Query
@@ -210,8 +217,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-admin-key
 
   syncTweetsToAlgolia:
     handler: functions/sync-tweets-to-algolia.handler
@@ -223,8 +230,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-admin-key
 
   search:
     handler: functions/search.handler
@@ -232,8 +239,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-admin-key
 
   getHashTag:
     handler: functions/getHashTag.handler
@@ -241,8 +248,8 @@ functions:
       - Effect: Allow
         Action: ssm:GetParameters
         Resource:
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-app-id
-          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:custom.stage}/algolia-admin-key
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-app-id
+          - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${sls:stage}/algolia-admin-key
 
   notify:
     handler: functions/notify.handler

@@ -14,6 +14,6 @@ RetweetsTable:
         AttributeType: S
     Tags:
       - Key: Environment
-        Value: ${self:custom.stage}
+        Value: ${sls:stage}
       - Key: Name
         Value: retweets-table

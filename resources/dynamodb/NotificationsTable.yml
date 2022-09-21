@@ -23,6 +23,6 @@ NotificationsTable:
           ProjectionType: ALL
     Tags:
       - Key: Environment
-        Value: ${self:custom.stage}
+        Value: ${sls:stage}
       - Key: Name
         Value: notifications-table

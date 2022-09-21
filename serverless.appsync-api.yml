@@ -1,6 +1,6 @@
 name: twitter
 schema: schema.api.graphql
-caching: ${self:custom.appSyncCaching.${self:custom.stage}, self:custom.appSyncCaching.default}
+caching: ${self:custom.appSyncCaching}
 authenticationType: AMAZON_COGNITO_USER_POOLS
 userPoolConfig:
   awsRegion: eu-west-1
@@ -8,8 +8,8 @@ userPoolConfig:
   userPoolId: !Ref CognitoUserPool
 logConfig:
   loggingRoleArn: !GetAtt AppSyncLoggingServiceRole.Arn
-  level: ${self:custom.appSyncLogLevel.${self:custom.stage}, self:custom.appSyncLogLevel.default}
-  excludeVerboseContent: ${self:custom.appSyncLogExcludeVerboseContent.${self:custom.stage}, self:custom.appSyncLogExcludeVerboseContent.default}
+  level: ${self:custom.appSyncLogLevel}
+  excludeVerboseContent: ${self:custom.appSyncLogExcludeVerboseContent}
 additionalAuthenticationProviders:
   - authenticationType: AWS_IAM
 mappingTemplatesLocation: mapping-templates
