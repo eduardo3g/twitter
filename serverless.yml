@@ -31,11 +31,6 @@ provider:
   environment:
     STAGE: ${sls:stage}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
-    AWS_REGION: ${self:custom.region}
-    COGNITO_USER_POOL_ID: !Ref CognitoUserPool
-    WEB_COGNITO_USER_POOL_CLIENT_ID: !Ref WebUserPoolClient
-    COGNITO_USER_POOL_PROVIDER_NAME: !GetAtt CognitoUserPool.ProviderName
-    COGNITO_IDENTITY_POOL_ID: !Ref IdentityPool
 
 package:
   exclude:
