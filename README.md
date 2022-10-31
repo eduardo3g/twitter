@@ -62,3 +62,10 @@ Feel free to <b>create a new issue</b> with an detailed title and description. I
 # 🎉 Contributing
 
 I'm highly opened to contributions and would love to review pull requests to make this project even better.
+
+## Missing Env Variables
+
+```javascript
+const { GRAPHQL_API_URL, AWS_REGION } = process.env;
+
+const { APPSYNC_API_ID, FIELD_LOG_LEVEL } = process.env;

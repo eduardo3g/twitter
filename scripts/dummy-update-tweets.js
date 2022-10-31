@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-AWS.config.region = 'eu-west-1';
+AWS.config.region = 'us-east-1';
 const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const { resolve } = require('path');
